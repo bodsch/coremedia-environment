@@ -32,6 +32,36 @@ resource "libvirt_volume" "cm-database-qcow2" {
   size = 10737418240
 }
 
+resource "libvirt_volume" "cm-backend-qcow2" {
+  name = "cm-backend.qcow2"
+  base_volume_id = "${libvirt_volume.base_vol.id}"
+  pool = "opt-share"
+  # Size in bytes (20 GB)
+  # size = 21474836480
+  # Size in bytes (10 GB)
+  size = 10737418240
+}
+
+resource "libvirt_volume" "cm-frontend-qcow2" {
+  name = "cm-frontend.qcow2"
+  base_volume_id = "${libvirt_volume.base_vol.id}"
+  pool = "opt-share"
+  # Size in bytes (20 GB)
+  # size = 21474836480
+  # Size in bytes (10 GB)
+  size = 10737418240
+}
+
+resource "libvirt_volume" "cm-delivery-qcow2" {
+  name = "cm-delivery.qcow2"
+  base_volume_id = "${libvirt_volume.base_vol.id}"
+  pool = "opt-share"
+  # Size in bytes (20 GB)
+  # size = 21474836480
+  # Size in bytes (10 GB)
+  size = 10737418240
+}
+
 # Use CloudInit to add our ssh-key to the instance
 resource "libvirt_cloudinit_disk" "commoninit" {
   name       = "commoninit.iso"
@@ -45,8 +75,8 @@ data "template_file" "user_data" {
 
 # Create the machine
 resource "libvirt_domain" "cm-database" {
-  name = "cm-database"
-  memory = "1024"
+  name = "database"
+  memory = "2048"
   vcpu = 1
 
   cloudinit = "${libvirt_cloudinit_disk.commoninit.id}"
@@ -86,4 +116,128 @@ resource "libvirt_domain" "cm-database" {
   }
 }
 
+resource "libvirt_domain" "cm-backend" {
+  name = "backend"
+  memory = "2048"
+  vcpu = 1
 
+  cloudinit = "${libvirt_cloudinit_disk.commoninit.id}"
+
+  network_interface {
+    network_id = "${libvirt_network.vm_network.id}"
+
+    hostname = "cm-backend"
+    addresses = [ "192.168.124.20" ]
+    mac = "AA:BB:CC:11:22:33"
+    wait_for_lease = 1
+  }
+
+  # IMPORTANT
+  # Ubuntu can hang is a isa-serial is not present at boot time.
+  # If you find your CPU 100% and never is available this is why
+  console {
+    type        = "pty"
+    target_port = "0"
+    target_type = "serial"
+  }
+
+  console {
+    type        = "pty"
+    target_type = "virtio"
+    target_port = "1"
+  }
+
+  disk {
+    volume_id = "${libvirt_volume.cm-backend-qcow2.id}"
+  }
+
+  graphics {
+    type = "spice"
+    listen_type = "address"
+    autoport = true
+  }
+}
+
+resource "libvirt_domain" "cm-frontend" {
+  name = "frontend"
+  memory = "2048"
+  vcpu = 1
+
+  cloudinit = "${libvirt_cloudinit_disk.commoninit.id}"
+
+  network_interface {
+    network_id = "${libvirt_network.vm_network.id}"
+
+    hostname = "cm-frontend"
+    addresses = [ "192.168.124.25" ]
+    mac = "AA:BB:CC:11:22:44"
+    wait_for_lease = 1
+  }
+
+  # IMPORTANT
+  # Ubuntu can hang is a isa-serial is not present at boot time.
+  # If you find your CPU 100% and never is available this is why
+  console {
+    type        = "pty"
+    target_port = "0"
+    target_type = "serial"
+  }
+
+  console {
+    type        = "pty"
+    target_type = "virtio"
+    target_port = "1"
+  }
+
+  disk {
+    volume_id = "${libvirt_volume.cm-frontend-qcow2.id}"
+  }
+
+  graphics {
+    type = "spice"
+    listen_type = "address"
+    autoport = true
+  }
+}
+
+resource "libvirt_domain" "cm-delivery" {
+  name = "delivery"
+  memory = "2048"
+  vcpu = 1
+
+  cloudinit = "${libvirt_cloudinit_disk.commoninit.id}"
+
+  network_interface {
+    network_id = "${libvirt_network.vm_network.id}"
+
+    hostname = "cm-delivery"
+    addresses = [ "192.168.124.30" ]
+    mac = "AA:BB:CC:11:22:55"
+    wait_for_lease = 1
+  }
+
+  # IMPORTANT
+  # Ubuntu can hang is a isa-serial is not present at boot time.
+  # If you find your CPU 100% and never is available this is why
+  console {
+    type        = "pty"
+    target_port = "0"
+    target_type = "serial"
+  }
+
+  console {
+    type        = "pty"
+    target_type = "virtio"
+    target_port = "1"
+  }
+
+  disk {
+    volume_id = "${libvirt_volume.cm-delivery-qcow2.id}"
+  }
+
+  graphics {
+    type = "spice"
+    listen_type = "address"
+    autoport = true
+  }
+}
