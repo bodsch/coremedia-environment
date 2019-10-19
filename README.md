@@ -1,4 +1,4 @@
-# Infrstructure for an CoreMedia Setup
+# Infrastructure for an CoreMedia Setup
 
 This is an Multi-Nodes Deployment.
 
@@ -6,7 +6,7 @@ The infrastructure is provided by Terraform.
 
 The required software is rolled out via ansible.
 
-This split the CoreMedia *Standard* (OneNode4All) deployment into a real production Multi-Nodes deployment.
+This split the CoreMedia *Standard* (OneNode4All) deployment into a real production Multi-Nodes setup.
 
 The services are rolled out to various virtual servers:
 
