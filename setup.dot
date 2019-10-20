@@ -1,0 +1,113 @@
+
+digraph G {
+
+  graph [splines=ortho, nodesep=1.5]
+
+//   compound=true;
+
+//  ratio=1
+//   overlap=false
+//  start=1
+//  rankdir=LR;
+
+  node [
+    fontsize=10,
+//     height=0.02,
+//     width=0.02,
+    shape=box
+  ]
+
+  edge [
+    style=solid,
+    arrowhead="normal",
+    arrowsize="0.7",
+//     headport="n"
+//     tailport="s"
+  ]
+
+  subgraph database {
+
+    graph [label="database", bgcolor = blue ] //, rank = same, bgcolor = antiquewhite, fixedsize=true, width=4, height=1]
+
+    mysql         [label="mysql"]
+    mongodb       [label="mongodb"]
+  }
+
+  subgraph backend {
+
+    graph [ label="backend" ]
+
+    httpd_be        [label="httpd"]
+
+    mls             [label="content-management-server"]
+    content_feeder  [label="content-feeder"]
+    user_changes    [label="user-changes"]
+    elastic_worker  [label="elastic-worker"]
+    cae_preview     [label="cae-preview"]
+    studio          [label="studio"]
+    sitemanager     [label="sitemanager"]
+    feeder_preview  [label="caefeeder-preview"]
+
+    workflow_server [label="workflow-server"]
+    solr_be         [label="solr"]
+
+    httpd_be        -> cae_preview
+    httpd_be        -> studio
+
+    mls             -> mysql
+    feeder_preview  -> mysql
+
+    feeder_preview  -> solr_be
+    user_changes    -> solr_be
+
+    workflow_server -> cms
+    workflow_server -> mongodb
+
+    elastic_worker  -> cms
+    elastic_worker  -> mongodb
+
+    user_changes    -> cms
+    user_changes    -> mongodb
+
+    mls             -> rls [ dir=both]
+  }
+
+  subgraph cluster_frontend {
+
+    graph [label="cluster_frontend", bgcolor = antiquewhite ]
+
+    subgraph frontend {
+
+
+      rls         [label="replication-live-server"]
+      mls         [label="master-live-server"]
+      feeder_live [label="caefeeder-live"]
+      solr_fe     [label="solr"]
+
+      cms             -> mysql
+      rls             -> mysql
+      feeder_live     -> mysql
+      feeder_live     -> solr_fe
+    }
+
+
+    subgraph delivery {
+
+      httpd_fe      [label="httpd"]
+      cae1          [label="cae-live-1"]
+      cae2          [label="cae-live-2"]
+      cae3          [label="cae-live-3"]
+
+      httpd_fe  -> cae1
+      httpd_fe  -> cae2
+      httpd_fe  -> cae3
+
+      cae1      -> rls
+      cae2      -> rls
+      cae3      -> rls
+    }
+  }
+
+
+
+}
