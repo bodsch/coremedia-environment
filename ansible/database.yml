@@ -1,0 +1,11 @@
+---
+
+# prepare the databases
+- hosts: database
+  gather_facts: true
+  become: yes
+  remote_user: sysadm
+  roles:
+    - role: common
+    # - role: mongodb
+    - role: mariadb
