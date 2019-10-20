@@ -15,52 +15,46 @@ resource "libvirt_network" "vm_network" {
   }
 }
 
-
+# base system
 resource "libvirt_volume" "base_vol" {
-  name = "lvm-centos"
-  pool = "default"
+  name  = "lvm-centos"
+  pool   = "default"
   source = "/var/lib/libvirt/images/CentOS-7-x86_64-GenericCloud-1907.qcow2"
 }
 
+output "image_bucket_name" {
+  value = "${lookup(var.server_database, "disk_size", "")}"
+}
+
+# clone from base system and resize ...
 resource "libvirt_volume" "cm-database-qcow2" {
-  name = "cm-database.qcow2"
+  name           = "cm-${var.server_database["hostname"]}.qcow2"
   base_volume_id = "${libvirt_volume.base_vol.id}"
-  pool = "opt-share"
-  # Size in bytes (20 GB)
-  # size = 21474836480
-  # Size in bytes (10 GB)
-  size = 10737418240
+  pool           = "opt-share"
+  size           = "${lookup(var.server_database, "disk_size", "") == "" ? "0" : var.server_database["disk_size"] }"
 }
 
 resource "libvirt_volume" "cm-backend-qcow2" {
-  name = "cm-backend.qcow2"
+  name           = "cm-${var.server_backend["hostname"]}.qcow2"
   base_volume_id = "${libvirt_volume.base_vol.id}"
-  pool = "opt-share"
-  # Size in bytes (20 GB)
-  # size = 21474836480
-  # Size in bytes (10 GB)
-  size = 10737418240
+  pool           = "opt-share"
+  size           = "${var.server_backend["disk_size"]}"
 }
 
 resource "libvirt_volume" "cm-frontend-qcow2" {
-  name = "cm-frontend.qcow2"
+  name           = "cm-${var.server_frontend["hostname"]}.qcow2"
   base_volume_id = "${libvirt_volume.base_vol.id}"
-  pool = "opt-share"
-  # Size in bytes (20 GB)
-  # size = 21474836480
-  # Size in bytes (10 GB)
-  size = 10737418240
+  pool           = "opt-share"
+  size           = "${var.server_frontend["disk_size"]}"
 }
 
 resource "libvirt_volume" "cm-delivery-qcow2" {
-  name = "cm-delivery.qcow2"
+  name           = "cm-${var.server_delivery["hostname"]}.qcow2"
   base_volume_id = "${libvirt_volume.base_vol.id}"
-  pool = "opt-share"
-  # Size in bytes (20 GB)
-  # size = 21474836480
-  # Size in bytes (10 GB)
-  size = 10737418240
+  pool           = "opt-share"
+  size           = "${var.server_delivery["disk_size"]}"
 }
+
 
 # Use CloudInit to add our ssh-key to the instance
 resource "libvirt_cloudinit_disk" "commoninit" {
@@ -75,18 +69,17 @@ data "template_file" "user_data" {
 
 # Create the machine
 resource "libvirt_domain" "cm-database" {
-  name = "database"
-  memory = "2048"
-  vcpu = 1
+  name   = "${var.server_database["hostname"]}"
+  memory = "${var.server_database["memory"]}"
+  vcpu   = "${var.server_database["vcpu"]}"
 
   cloudinit = "${libvirt_cloudinit_disk.commoninit.id}"
 
   network_interface {
     network_id = "${libvirt_network.vm_network.id}"
 
-    hostname = "cm-database"
-    addresses = [ "192.168.124.10" ]
-    mac = "AA:BB:CC:11:22:22"
+    hostname  = "${var.server_database["hostname"]}"
+    addresses = [ "${var.server_database["ip"]}" ]
     wait_for_lease = 1
   }
 
@@ -117,18 +110,17 @@ resource "libvirt_domain" "cm-database" {
 }
 
 resource "libvirt_domain" "cm-backend" {
-  name = "backend"
-  memory = "2048"
-  vcpu = 1
+  name   = "${var.server_backend["hostname"]}"
+  memory = "${var.server_backend["memory"]}"
+  vcpu   = "${var.server_backend["vcpu"]}"
 
   cloudinit = "${libvirt_cloudinit_disk.commoninit.id}"
 
   network_interface {
     network_id = "${libvirt_network.vm_network.id}"
 
-    hostname = "cm-backend"
-    addresses = [ "192.168.124.20" ]
-    mac = "AA:BB:CC:11:22:33"
+    hostname  = "${var.server_backend["hostname"]}"
+    addresses = [ "${var.server_backend["ip"]}" ]
     wait_for_lease = 1
   }
 
@@ -159,9 +151,9 @@ resource "libvirt_domain" "cm-backend" {
 }
 
 resource "libvirt_domain" "cm-frontend" {
-  name = "frontend"
-  memory = "2048"
-  vcpu = 1
+  name   = "${var.server_frontend["hostname"]}"
+  memory = "${var.server_frontend["memory"]}"
+  vcpu   = "${var.server_frontend["vcpu"]}"
 
   cloudinit = "${libvirt_cloudinit_disk.commoninit.id}"
 
@@ -169,8 +161,8 @@ resource "libvirt_domain" "cm-frontend" {
     network_id = "${libvirt_network.vm_network.id}"
 
     hostname = "cm-frontend"
-    addresses = [ "192.168.124.25" ]
-    mac = "AA:BB:CC:11:22:44"
+    hostname  = "${var.server_frontend["hostname"]}"
+    addresses = [ "${var.server_frontend["ip"]}" ]
     wait_for_lease = 1
   }
 
@@ -201,18 +193,17 @@ resource "libvirt_domain" "cm-frontend" {
 }
 
 resource "libvirt_domain" "cm-delivery" {
-  name = "delivery"
-  memory = "2048"
-  vcpu = 1
+  name   = "${var.server_delivery["hostname"]}"
+  memory = "${var.server_delivery["memory"]}"
+  vcpu   = "${var.server_delivery["vcpu"]}"
 
   cloudinit = "${libvirt_cloudinit_disk.commoninit.id}"
 
   network_interface {
     network_id = "${libvirt_network.vm_network.id}"
 
-    hostname = "cm-delivery"
-    addresses = [ "192.168.124.30" ]
-    mac = "AA:BB:CC:11:22:55"
+    hostname  = "${var.server_delivery["hostname"]}"
+    addresses = [ "${var.server_delivery["ip"]}" ]
     wait_for_lease = 1
   }
 
