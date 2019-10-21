@@ -11,7 +11,7 @@ $ cd ~
 $ terraform init
 Terraform initialized in an empty directory!
 
-$ mkdir ~/.terraform.d/plugins/linux_amd64
+$ mkdir -p ~/.terraform.d/plugins/linux_amd64
 
 $ cd ~/.terraform.d/plugins/linux_amd64
 $ curl -sL https://github.com/dmacvicar/terraform-provider-libvirt/releases/download/v0.6.0/terraform-provider-libvirt-0.6.0+git.1569597268.1c8597df.Ubuntu_18.04.amd64.tar.gz > terraform-provider-libvirt.tar.gz
@@ -22,6 +22,34 @@ Compiled against library: libvirt 4.0.0
 Using library: libvirt 5.5.0
 Running hypervisor: QEMU 4.0.0
 Running against daemon: 5.5.0
+```
+# download Cloud Image
+
+```
+$ cd /var/lib/libvirt/images
+$ sudo curl -sL https://cloud.centos.org/centos/7/images/CentOS-7-x86_64-GenericCloud-1907.qcow2.xz -o CentOS-7-x86_64-GenericCloud-1907.qcow2.xz
+$ sudo xz -d CentOS-7-x86_64-GenericCloud-1907.qcow2.xz
+```
+
+# configure KVM / QEMU
+
+check if you are in the `libvirt` group:
+```
+$ sudo getent group | grep libvirt
+```
+otherwise add:
+```
+$ sudo usermod -a -G libvirt $(whoami)
+```
+
+change permissions for qemu and restart service:
+```
+cat << EOF > /etc/libvirt/qemu.conf
+user = "libvirt-qemu"
+group = "libvirt"
+EOF
+
+$ service libvirtd restart
 ```
 
 ## usage of this part
@@ -51,4 +79,5 @@ $ terraform show
 $ terraform destroy [-auto-approve]
 
 ```
+
 
