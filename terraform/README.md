@@ -44,7 +44,7 @@ $ sudo usermod -a -G libvirt $(whoami)
 
 change permissions for qemu and restart service:
 ```
-cat << EOF > /etc/libvirt/qemu.conf
+cat << EOF >> /etc/libvirt/qemu.conf
 user = "libvirt-qemu"
 group = "libvirt"
 EOF
