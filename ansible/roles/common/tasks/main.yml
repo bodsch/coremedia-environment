@@ -1,0 +1,26 @@
+---
+
+- name: set timezone to UTC
+  timezone:
+    name: UTC
+
+- name: ensure group 'coremedia' exists
+  group:
+    name: coremedia
+    state: present
+
+- name: ensure user 'coremedia' exists
+  user:
+    name: coremedia
+    comment: CoreMedia Service User
+    group: coremedia
+    shell: /bin/bash
+    home: /opt/coremedia
+
+- name: Make sure Ansible local facts directory exists
+  file:
+    dest: '/etc/ansible/facts.d'
+    state: 'directory'
+    owner: 'root'
+    group: 'root'
+    mode: '0755'

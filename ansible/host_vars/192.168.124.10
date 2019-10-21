@@ -1,0 +1,68 @@
+---
+
+# MariaDB
+
+mariadb_bind_address: '0.0.0.0'
+mariadb_root_password: 'coremedia'
+
+mariadb_databases:
+  - name: monitoring
+    collation: utf8mb4_bin
+    encoding: utf8mb4
+
+  - name: cm_master
+    collation: utf8mb4_bin
+    encoding: utf8mb4
+
+  - name: cm_management
+    collation: utf8mb4_bin
+    encoding: utf8mb4
+
+  - name: cm_replication
+    collation: utf8mb4_bin
+    encoding: utf8mb4
+
+  - name: cm_caefeeder
+    collation: utf8mb4_bin
+    encoding: utf8mb4
+
+  - name: cm_mcaefeeder
+    collation: utf8mb4_bin
+    encoding: utf8mb4
+
+mariadb_users:
+
+  - name: monitoring
+    host: '%'
+    password: monitoring
+    priv: "monitoring.*:ALL"
+
+  - name: cm_master
+    host: '%'
+    password: cm_master
+    priv: "cm_master.*:ALL"
+
+  - name: cm_management
+    host: '%'
+    password: cm_management
+    priv: "cm_management.*:ALL"
+
+  - name: cm_replication
+    host: '%'
+    password: cm_replication
+    priv: "cm_replication.*:ALL"
+
+  - name: cm_caefeeder
+    host: '%'
+    password: cm_caefeeder
+    priv: "cm_caefeeder.*:ALL"
+
+  - name: cm_mcaefeeder
+    host: '%'
+    password: cm_mcaefeeder
+    priv: "cm_mcaefeeder.*:ALL"
+
+
+# MongoDB
+mongodb_net_bindip: '0.0.0.0'
+mongodb_storage_dbpath: '/var/lib/mongo'
