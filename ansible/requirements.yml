@@ -1,0 +1,12 @@
+- name: coretto
+  src: https://github.com/bodsch/ansible-coretto-java.git
+  version: master
+- name: mariadb
+  src: https://github.com/bertvv/ansible-role-mariadb.git
+  version: v3.0.0
+- name: sshd
+  src: https://github.com/willshersystems/ansible-sshd.git
+  version: v0.8.0
+- name: mongodb
+  src: https://github.com/UnderGreen/ansible-role-mongodb.git
+  version: v2.6.0

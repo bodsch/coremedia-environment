@@ -7,5 +7,5 @@
   remote_user: sysadm
   roles:
     - role: common
-    # - role: mongodb
+    - role: mongodb
     - role: mariadb
