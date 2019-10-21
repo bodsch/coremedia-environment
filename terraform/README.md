@@ -23,6 +23,34 @@ Using library: libvirt 5.5.0
 Running hypervisor: QEMU 4.0.0
 Running against daemon: 5.5.0
 ```
+# download Cloud Image
+
+```
+$ cd /var/lib/libvirt/images
+$ sudo curl -sL https://cloud.centos.org/centos/7/images/CentOS-7-x86_64-GenericCloud-1907.qcow2.xz -o CentOS-7-x86_64-GenericCloud-1907.qcow2.xz
+$ sudo xz -d CentOS-7-x86_64-GenericCloud-1907.qcow2.xz
+```
+
+# configure KVM / QEMU
+
+check if you are in the `libvirt` group:
+```
+$ sudo getent group | grep libvirt
+```
+otherwise add:
+```
+$ sudo usermod -a -G libvirt $(whoami)
+```
+
+change permissions for qemu and restart service:
+```
+cat << EOF > /etc/libvirt/qemu.conf
+user = "libvirt-qemu"
+group = "libvirt"
+EOF
+
+$ service libvirtd restart
+```
 
 ## usage of this part
 
@@ -52,10 +80,4 @@ $ terraform destroy [-auto-approve]
 
 ```
 
-# download Cloud Image
 
-```
-$ cd /var/lib/libvirt/images
-$ sudo curl -sL https://cloud.centos.org/centos/7/images/CentOS-7-x86_64-GenericCloud-1907.qcow2.xz -o CentOS-7-x86_64-GenericCloud-1907.qcow2.xz
-$ sudo xz -d CentOS-7-x86_64-GenericCloud-1907.qcow2.xz
-```
