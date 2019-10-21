@@ -17,6 +17,8 @@ The services are rolled out to various virtual servers:
 | **frontend** | master-live-server, replication-live-server, caefeeder-live, solr |
 | **delivery** | cae-live-1, cae-live-2, cae-live-3 |
 
+![setup](setup.png)
+
 # infrastructure
 
 Take a look into `terraform`
