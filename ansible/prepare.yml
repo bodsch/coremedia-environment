@@ -1,0 +1,13 @@
+---
+
+# prepare all coremedia machines
+- hosts: delivery,frontend,backend
+  gather_facts: true
+  become: yes
+  remote_user: sysadm
+  roles:
+    - role: common
+    - role: firewalld
+    - role: coretto
+    - role: chef-client
+    - role: cm-artifacts

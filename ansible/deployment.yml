@@ -1,0 +1,10 @@
+---
+
+- hosts: delivery,frontend,backend
+  gather_facts: true
+  become: yes
+  remote_user: sysadm
+  roles:
+    - role: cm-licenses
+    - role: cm-deployment
+
