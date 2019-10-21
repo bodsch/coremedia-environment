@@ -1,0 +1,13 @@
+---
+
+firewalld_ports_open:
+  - proto: tcp
+    port: 22
+  - proto: tcp
+    port: 40080
+  - proto: tcp
+    port: 40280
+  - proto: tcp
+    port: 42080
+
+

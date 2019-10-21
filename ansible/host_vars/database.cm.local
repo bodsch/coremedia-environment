@@ -1,5 +1,13 @@
 ---
 
+firewalld_ports_open:
+  - proto: tcp
+    port: 22
+  - proto: tcp
+    port: 3306
+  - proto: tcp
+    port: 27017
+
 # MariaDB
 
 mariadb_bind_address: '0.0.0.0'

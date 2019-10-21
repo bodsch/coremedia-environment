@@ -1,3 +1,6 @@
+- name: dnsmasq
+  src: https://github.com/bertvv/ansible-dnsmasq.git
+  version: v2.1.0
 - name: coretto
   src: https://github.com/bodsch/ansible-coretto-java.git
   version: master
@@ -10,3 +13,18 @@
 - name: mongodb
   src: https://github.com/UnderGreen/ansible-role-mongodb.git
   version: v2.6.0
+- name: firewalld
+  src: https://github.com/oasis-roles/firewalld.git
+  version: master
+- name: grafana
+  src: https://github.com/cloudalchemy/ansible-grafana.git
+  version: 0.14.2
+- name: node_exporter
+  src: https://github.com/cloudalchemy/ansible-node-exporter.git
+  version: 0.14.0
+- name: prometheus
+  src: https://github.com/cloudalchemy/ansible-prometheus.git
+  version: 2.9.1
+- name: nginx
+  src: https://github.com/geerlingguy/ansible-role-nginx.git
+  version: 2.6.1

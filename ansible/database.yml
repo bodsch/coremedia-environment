@@ -7,5 +7,6 @@
   remote_user: sysadm
   roles:
     - role: common
+    - role: firewalld
     - role: mongodb
     - role: mariadb

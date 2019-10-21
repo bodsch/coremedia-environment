@@ -1,0 +1,7 @@
+---
+
+firewalld_ports_open:
+  - proto: tcp
+    port: 22
+  - proto: tcp
+    port: 40180

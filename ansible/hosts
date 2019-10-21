@@ -8,7 +8,7 @@ ansible_python_interpreter=python
 ansible_become=False
 
 [database]
-192.168.124.10
+database.cm.local
 
 [database:vars]
 ansible_ssh_user = sysadm
@@ -16,11 +16,25 @@ ansible_ssh_pass = xxx
 ansible_sudo_pass = xxx
 
 [backend]
-moebius-backend.coremedia.vm
+backend.cm.local
+
+[backend:vars]
+ansible_ssh_user = sysadm
+ansible_ssh_pass = xxx
+ansible_sudo_pass = xxx
 
 [frontend]
-moebius-frontend.coremedia.vm
+frontend.cm.local
+
+[frontend:vars]
+ansible_ssh_user = sysadm
+ansible_ssh_pass = xxx
+ansible_sudo_pass = xxx
 
 [delivery]
-moebius-delivery.coremedia.vm
+delivery.cm.local
 
+[delivery:vars]
+ansible_ssh_user = sysadm
+ansible_ssh_pass = xxx
+ansible_sudo_pass = xxx

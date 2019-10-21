@@ -24,3 +24,17 @@
     owner: 'root'
     group: 'root'
     mode: '0755'
+
+- name: ensure needed packages are installed
+  package:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - unzip
+    - python-dns
+    - bind-utils
+
+- name: 'add subdomains to /etc/hosts'
+  template:
+    src: templates/hosts.j2
+    dest: /etc/hosts
