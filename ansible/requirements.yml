@@ -1,9 +1,6 @@
 - name: dnsmasq
   src: https://github.com/bertvv/ansible-dnsmasq.git
   version: v2.1.0
-- name: coretto
-  src: https://github.com/bodsch/ansible-coretto-java.git
-  version: master
 - name: mariadb
   src: https://github.com/bertvv/ansible-role-mariadb.git
   version: v3.0.0
@@ -28,3 +25,19 @@
 - name: nginx
   src: https://github.com/geerlingguy/ansible-role-nginx.git
   version: 2.6.1
+
+- name: coretto
+  src: https://github.com/bodsch/ansible-coretto-java.git
+  version: master
+- name: chef-client
+  src: https://gitlab.com/bodsch/ansible-coremedia-chef-client.git
+  scm: git
+  version: master
+- name: coremedia-artifacts
+  src: https://gitlab.com/bodsch/ansible-coremedia-artifacts.git
+  scm: git
+  version: master
+- name: coremedia-deployment
+  src: https://gitlab.com/bodsch/ansible-coremedia-deployment.git
+  scm: git
+  version: master

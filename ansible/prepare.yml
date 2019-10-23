@@ -6,8 +6,8 @@
   become: yes
   remote_user: sysadm
   roles:
-    - role: common
-    - role: firewalld
-    - role: coretto
-    - role: chef-client
-    - role: cm-artifacts
+    #- role: common
+    #- role: firewalld
+    #- role: coretto
+    #- role: chef-client
+    - role: coremedia-artifacts
