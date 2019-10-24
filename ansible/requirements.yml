@@ -10,6 +10,9 @@
 - name: mongodb
   src: https://github.com/UnderGreen/ansible-role-mongodb.git
   version: v2.6.0
+- name: redis
+  src: https://github.com/geerlingguy/ansible-role-redis.git
+  version: 1.6.0
 - name: firewalld
   src: https://github.com/oasis-roles/firewalld.git
   version: master
@@ -41,3 +44,7 @@
   src: https://gitlab.com/bodsch/ansible-coremedia-deployment.git
   scm: git
   version: master
+- name: trickster
+  src: https://gitlab.com/bodsch/ansible-trickster.git
+  scm: git
+  version: 1.0.0
