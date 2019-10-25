@@ -44,6 +44,10 @@
   src: https://gitlab.com/bodsch/ansible-coremedia-deployment.git
   scm: git
   version: master
+- name: grafana_selinux
+  src: https://gitlab.com/bodsch/ansible-grafana-selinux.git
+  scm: git
+  version: 1.0.0
 - name: trickster
   src: https://gitlab.com/bodsch/ansible-trickster.git
   scm: git

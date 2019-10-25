@@ -11,4 +11,5 @@
     - role: trickster
     - role: prometheus
     - role: grafana
+    - role: grafana_selinux
     - role: nginx

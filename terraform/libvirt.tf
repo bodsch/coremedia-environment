@@ -30,35 +30,35 @@ output "image_bucket_name" {
 resource "libvirt_volume" "cm-monitoring-qcow2" {
   name           = "cm-${var.server_monitoring["hostname"]}.qcow2"
   base_volume_id = "${libvirt_volume.base_vol.id}"
-  pool           = "opt-share"
+  pool           = "default"
   size           = "${lookup(var.server_database, "disk_size", "") == "" ? "0" : var.server_monitoring["disk_size"] }"
 }
 
 #resource "libvirt_volume" "cm-database-qcow2" {
 #  name           = "cm-${var.server_database["hostname"]}.qcow2"
 #  base_volume_id = "${libvirt_volume.base_vol.id}"
-#  pool           = "opt-share"
+#  pool           = "default"
 #  size           = "${lookup(var.server_database, "disk_size", "") == "" ? "0" : var.server_database["disk_size"] }"
 #}
 #
 #resource "libvirt_volume" "cm-backend-qcow2" {
 #  name           = "cm-${var.server_backend["hostname"]}.qcow2"
 #  base_volume_id = "${libvirt_volume.base_vol.id}"
-#  pool           = "opt-share"
+#  pool           = "default"
 #  size           = "${var.server_backend["disk_size"]}"
 #}
 #
 #resource "libvirt_volume" "cm-frontend-qcow2" {
 #  name           = "cm-${var.server_frontend["hostname"]}.qcow2"
 #  base_volume_id = "${libvirt_volume.base_vol.id}"
-#  pool           = "opt-share"
+#  pool           = "default"
 #  size           = "${var.server_frontend["disk_size"]}"
 #}
 #
 #resource "libvirt_volume" "cm-delivery-qcow2" {
 #  name           = "cm-${var.server_delivery["hostname"]}.qcow2"
 #  base_volume_id = "${libvirt_volume.base_vol.id}"
-#  pool           = "opt-share"
+#  pool           = "default"
 #  size           = "${var.server_delivery["disk_size"]}"
 #}
 
@@ -66,7 +66,7 @@ resource "libvirt_volume" "cm-monitoring-qcow2" {
 # Use CloudInit to add our ssh-key to the instance
 resource "libvirt_cloudinit_disk" "commoninit" {
   name       = "commoninit.iso"
-  pool       = "opt-share"
+  pool       = "default"
   user_data  = "${data.template_file.user_data.rendered}"
 }
 
