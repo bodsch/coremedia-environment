@@ -38,3 +38,12 @@ delivery.cm.local
 ansible_ssh_user = sysadm
 ansible_ssh_pass = xxx
 ansible_sudo_pass = xxx
+
+[monitoring]
+monitoring.cm.local
+
+[monitoring:vars]
+ansible_python_interpreter=python3
+ansible_ssh_user = sysadm
+ansible_ssh_pass = xxx
+ansible_sudo_pass = xxx
