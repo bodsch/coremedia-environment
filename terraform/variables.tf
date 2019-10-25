@@ -4,6 +4,18 @@
   # Size in bytes (10 GB)
   # size = 10737418240
 
+variable "server_monitoring" {
+  type = "map"
+
+  default = {
+    "memory"    = 2048
+    "vcpu"      = 1
+    "disk_size" = "10737418240"
+    "ip"        = "192.168.124.50"
+    "hostname"  = "monitoring"
+  }
+}
+
 variable "server_database" {
   type = "map"
 
