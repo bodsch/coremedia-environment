@@ -1,0 +1,7 @@
+---
+
+firewalld_ports_open:
+  - proto: tcp
+    port: 22
+
+prometheus_version: 2.13.1

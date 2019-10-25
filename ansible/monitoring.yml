@@ -1,0 +1,14 @@
+---
+
+- hosts: monitoring
+  gather_facts: true
+  become: yes
+  remote_user: sysadm
+  roles:
+    - role: common
+    - role: firewalld
+    - role: redis
+    - role: trickster
+    - role: prometheus
+    - role: grafana
+    - role: nginx
