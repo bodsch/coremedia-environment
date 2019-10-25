@@ -24,7 +24,7 @@
   version: 0.14.0
 - name: prometheus
   src: https://github.com/cloudalchemy/ansible-prometheus.git
-  version: 2.9.1
+  version: 2.11.0
 - name: nginx
   src: https://github.com/geerlingguy/ansible-role-nginx.git
   version: 2.6.1
@@ -47,4 +47,4 @@
 - name: trickster
   src: https://gitlab.com/bodsch/ansible-trickster.git
   scm: git
-  version: 1.0.0
+  version: 1.0.1
