@@ -4,6 +4,8 @@
   # gather_facts: true
   become: yes
   remote_user: sysadm
+  environment:
+    NETRC: ''
   roles:
     #- role: common
     #- role: firewalld
