@@ -8,9 +8,9 @@ variable "server_monitoring" {
   type = "map"
 
   default = {
-    "memory"    = 2048
+    "memory"    = 512
     "vcpu"      = 1
-    "disk_size" = "10737418240"
+    "disk_size" = ""
     "ip"        = "192.168.124.50"
     "hostname"  = "monitoring"
   }
@@ -20,7 +20,7 @@ variable "server_database" {
   type = "map"
 
   default = {
-    "memory"    = 2048
+    "memory"    = 512
     "vcpu"      = 1
     "disk_size" = ""
     "ip"        = "192.168.124.10"
