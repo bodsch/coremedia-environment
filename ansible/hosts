@@ -1,11 +1,11 @@
 
-[local]
-localhost
-
-[local:vars]
-ansible_connection=local
-ansible_python_interpreter=python
-ansible_become=False
+# [local]
+# localhost
+#
+# [local:vars]
+# ansible_connection=local
+# ansible_python_interpreter=python
+# ansible_become=False
 
 [database]
 database.cm.local
@@ -43,7 +43,7 @@ ansible_sudo_pass = xxx
 monitoring.cm.local
 
 [monitoring:vars]
-ansible_python_interpreter=python3
+# ansible_python_interpreter=python3
 ansible_ssh_user = sysadm
 ansible_ssh_pass = xxx
 ansible_sudo_pass = xxx

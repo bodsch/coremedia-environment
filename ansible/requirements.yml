@@ -31,7 +31,8 @@
 
 - name: coretto
   src: https://github.com/bodsch/ansible-coretto-java.git
-  version: master
+  scm: git
+  version: 1.0.0
 - name: chef-client
   src: https://gitlab.com/bodsch/ansible-coremedia-chef-client.git
   scm: git
