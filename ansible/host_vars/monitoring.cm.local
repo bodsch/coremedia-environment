@@ -6,9 +6,17 @@ firewalld_ports_open:
   - proto: tcp
     port: 80
 
+# trickster
+#
+trickster_proxy_server_listen_address: '127.0.0.1'
+trickster_proxy_server_listen_port: 9092
+trickster_metrics_listen_address: '127.0.0.1'
+trickster_cache_type:  'redis'
+
 # prometheus
 #
 prometheus_version: 2.13.1
+# we want trickster as cache, also bind to port 9091
 prometheus_web_listen_address: '127.0.0.1:9091' # "{{ ansible_default_ipv4.address }}:9090"
 prometheus_storage_retention: "90d"
 prometheus_storage_retention_size: "100MB"
@@ -33,7 +41,7 @@ grafana_datasources:
   - name: "Prometheus"
     type: "prometheus"
     access: "proxy"
-    url: 'http://127.0.0.1:9090'
+    url: 'http://127.0.0.1:9092'
     # basicAuth: false
     isDefault: true
 

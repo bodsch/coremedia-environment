@@ -5,6 +5,11 @@
   become: yes
   remote_user: sysadm
   roles:
-    - role: cm-licenses
-    - role: cm-deployment
+    - role: coremedia-tomcat
 
+- hosts: backend
+  gather_facts: true
+  become: yes
+  remote_user: sysadm
+  roles:
+    - role: coremedia-cms

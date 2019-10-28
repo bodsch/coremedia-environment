@@ -25,3 +25,12 @@
   template:
     src: templates/hosts.j2
     dest: /etc/hosts
+
+- name: 'ensure unneeded services are stoped and disabled'
+  service:
+    name: "{{ item }}"
+    state: stopped
+    enabled: false
+  loop:
+    - rpcbind
+    - rpcbind.socket

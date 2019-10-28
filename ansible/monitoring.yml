@@ -7,11 +7,11 @@
   environment:
     NETRC: ''
   roles:
-    #- role: common
-    #- role: firewalld
-    #- role: redis
-    #- role: trickster
+    - role: common
+    - role: firewalld
+    - role: redis
+    - role: trickster
     - role: prometheus
-    #- role: grafana
-    #- role: grafana_selinux
-    #- role: nginx
+    - role: grafana
+    - role: grafana_selinux
+    - role: nginx

@@ -11,5 +11,7 @@
     - role: common
     - role: firewalld
     - role: coretto
-    - role: chef-client
+    #- role: chef-client
     #- role: coremedia-artifacts
+    #- role: coremedia-tomcat
+    #- role: coremedia-cms
