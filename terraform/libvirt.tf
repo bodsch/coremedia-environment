@@ -19,7 +19,7 @@ resource "libvirt_network" "int_network" {
   name      = "int_network"
   bridge    = "int-bridge-1"
   domain    = "int"
-  mode      = "none"
+  mode      = "open"
   addresses = [ "192.168.2.0/24" ]
 
   dns {
