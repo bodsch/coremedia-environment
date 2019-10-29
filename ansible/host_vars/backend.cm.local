@@ -5,3 +5,15 @@ firewalld_ports_open:
     port: 22
   - proto: tcp
     port: 40180
+  - proto: tcp
+    port: 40183
+
+content_management:
+  solr:
+    url: http://solr.int:40080/solr
+  sql:
+    store:
+      url: 'jdbc:mysql://mysql.database.int:3306/cm_management'
+  publisher:
+    target:
+      ior_url: http://master-live-server.int:40280/coremedia/ior

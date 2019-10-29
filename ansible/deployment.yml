@@ -5,11 +5,11 @@
   become: yes
   remote_user: sysadm
   roles:
-    - role: coremedia-tomcat
+    - role: tomcat
 
 - hosts: backend
   gather_facts: true
   become: yes
   remote_user: sysadm
   roles:
-    - role: coremedia-cms
+    - role: content-management-server
