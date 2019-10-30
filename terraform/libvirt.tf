@@ -15,18 +15,24 @@ resource "libvirt_network" "vm_network" {
   }
 }
 
-resource "libvirt_network" "int_network" {
-  name      = "int_network"
-  bridge    = "int-bridge-1"
-  domain    = "int"
-  mode      = "open"
-  addresses = [ "192.168.2.0/24" ]
-
-  dns {
-    enabled = true
-    local_only = true
-  }
-}
+# see issue: https://github.com/bodsch/coremedia-environment/issues/1
+# https://medium.com/faun/creating-instances-with-multiple-network-interfaces-and-ip-route-issue-on-google-cloud-platform-6ac24977613e
+#
+# resource "libvirt_network" "int_network" {
+#   name      = "int_network"
+#   bridge    = "int-bridge-1"
+#   domain    = "int"
+#   mode      = "route"
+#   addresses = [ "192.168.2.0/24" ]
+#
+#   dhcp {
+#     enabled = false
+#   }
+#   dns {
+#     enabled = true
+#     local_only = true
+#   }
+# }
 
 # base system
 resource "libvirt_volume" "base_vol" {
@@ -46,20 +52,20 @@ output "image_bucket_name" {
 #  pool           = "default"
 #  size           = "${lookup(var.server_database, "disk_size", "") == "" ? "0" : var.server_monitoring["disk_size"] }"
 #}
-#
-#resource "libvirt_volume" "cm-database-qcow2" {
-#  name           = "cm-${var.server_database["hostname"]}.qcow2"
-#  base_volume_id = "${libvirt_volume.base_vol.id}"
-#  pool           = "default"
-#  size           = "${lookup(var.server_database, "disk_size", "") == "" ? "0" : var.server_database["disk_size"] }"
-#}
-#
-#resource "libvirt_volume" "cm-backend-qcow2" {
-#  name           = "cm-${var.server_backend["hostname"]}.qcow2"
-#  base_volume_id = "${libvirt_volume.base_vol.id}"
-#  pool           = "default"
-#  size           = "${var.server_backend["disk_size"]}"
-#}
+
+resource "libvirt_volume" "cm-database-qcow2" {
+  name           = "cm-${var.server_database["hostname"]}.qcow2"
+  base_volume_id = "${libvirt_volume.base_vol.id}"
+  pool           = "default"
+  size           = "${lookup(var.server_database, "disk_size", "") == "" ? "0" : var.server_database["disk_size"] }"
+}
+
+resource "libvirt_volume" "cm-backend-qcow2" {
+  name           = "cm-${var.server_backend["hostname"]}.qcow2"
+  base_volume_id = "${libvirt_volume.base_vol.id}"
+  pool           = "default"
+  size           = "${var.server_backend["disk_size"]}"
+}
 
 resource "libvirt_volume" "cm-frontend-qcow2" {
   name           = "cm-${var.server_frontend["hostname"]}.qcow2"
@@ -129,88 +135,85 @@ data "template_file" "user_data" {
 #  }
 #}
 #
-#
-#resource "libvirt_domain" "cm-database" {
-#  name   = "${var.server_database["hostname"]}"
-#  memory = "${var.server_database["memory"]}"
-#  vcpu   = "${var.server_database["vcpu"]}"
-#
-#  cloudinit = "${libvirt_cloudinit_disk.commoninit.id}"
-#
-#  network_interface {
-#    network_id = "${libvirt_network.vm_network.id}"
-#
-#    hostname  = "${var.server_database["hostname"]}"
-#    addresses = [ "${var.server_database["ip"]}" ]
-#    wait_for_lease = 1
-#  }
-#
-#  # IMPORTANT
-#  # Ubuntu can hang is a isa-serial is not present at boot time.
-#  # If you find your CPU 100% and never is available this is why
-#  console {
-#    type        = "pty"
-#    target_port = "0"
-#    target_type = "serial"
-#  }
-#
-#  console {
-#    type        = "pty"
-#    target_type = "virtio"
-#    target_port = "1"
-#  }
-#
-#  disk {
-#    volume_id = "${libvirt_volume.cm-database-qcow2.id}"
-#  }
-#
-#  graphics {
-#    type = "spice"
-#    listen_type = "address"
-#    autoport = true
-#  }
-#}
-#
-#resource "libvirt_domain" "cm-backend" {
-#  name   = "${var.server_backend["hostname"]}"
-#  memory = "${var.server_backend["memory"]}"
-#  vcpu   = "${var.server_backend["vcpu"]}"
-#
-#  cloudinit = "${libvirt_cloudinit_disk.commoninit.id}"
-#
-#  network_interface {
-#    network_id = "${libvirt_network.vm_network.id}"
-#
-#    hostname  = "${var.server_backend["hostname"]}"
-#    addresses = [ "${var.server_backend["ip"]}" ]
-#    wait_for_lease = 1
-#  }
-#
-#  # IMPORTANT
-#  # Ubuntu can hang is a isa-serial is not present at boot time.
-#  # If you find your CPU 100% and never is available this is why
-#  console {
-#    type        = "pty"
-#    target_port = "0"
-#    target_type = "serial"
-#  }
-#
-#  console {
-#    type        = "pty"
-#    target_type = "virtio"
-#    target_port = "1"
-#  }
-#
-#  disk {
-#    volume_id = "${libvirt_volume.cm-backend-qcow2.id}"
-#  }
-#
-#  graphics {
-#    type = "spice"
-#    listen_type = "address"
-#    autoport = true
-#  }
-#}
+
+resource "libvirt_domain" "cm-database" {
+  name   = "${var.server_database["hostname"]}"
+  memory = "${var.server_database["memory"]}"
+  vcpu   = "${var.server_database["vcpu"]}"
+
+  cloudinit = "${libvirt_cloudinit_disk.commoninit.id}"
+
+  network_interface {
+    network_id = "${libvirt_network.vm_network.id}"
+
+    hostname  = "${var.server_database["hostname"]}"
+    addresses = [ "${var.server_database["ip"]}" ]
+    wait_for_lease = 1
+  }
+
+  # IMPORTANT
+  # Ubuntu can hang is a isa-serial is not present at boot time.
+  # If you find your CPU 100% and never is available this is why
+  console {
+    type        = "pty"
+    target_port = "0"
+    target_type = "serial"
+  }
+
+  console {
+    type        = "pty"
+    target_type = "virtio"
+    target_port = "1"
+  }
+
+  disk {
+    volume_id = "${libvirt_volume.cm-database-qcow2.id}"
+  }
+
+  graphics {
+    type = "spice"
+    listen_type = "address"
+    autoport = true
+  }
+}
+
+resource "libvirt_domain" "cm-backend" {
+  name   = "${var.server_backend["hostname"]}"
+  memory = "${var.server_backend["memory"]}"
+  vcpu   = "${var.server_backend["vcpu"]}"
+
+  cloudinit = "${libvirt_cloudinit_disk.commoninit.id}"
+
+  network_interface {
+    network_id = "${libvirt_network.vm_network.id}"
+
+    hostname  = "${var.server_backend["hostname"]}"
+    addresses = [ "${var.server_backend["ip"]}" ]
+    wait_for_lease = 1
+  }
+
+  console {
+    type        = "pty"
+    target_port = "0"
+    target_type = "serial"
+  }
+
+  console {
+    type        = "pty"
+    target_type = "virtio"
+    target_port = "1"
+  }
+
+  disk {
+    volume_id = "${libvirt_volume.cm-backend-qcow2.id}"
+  }
+
+  graphics {
+    type = "spice"
+    listen_type = "address"
+    autoport = true
+  }
+}
 
 resource "libvirt_domain" "cm-frontend" {
   name   = "${var.server_frontend["hostname"]}"
@@ -228,17 +231,14 @@ resource "libvirt_domain" "cm-frontend" {
     wait_for_lease = 1
   }
 
-  network_interface {
-    network_id = "${libvirt_network.int_network.id}"
+#  network_interface {
+#    network_id = "${libvirt_network.int_network.id}"
+#
+#    hostname  = "${var.server_frontend["hostname"]}"
+#    addresses = [ "192.168.2.30" ]
+#    wait_for_lease = 1
+#  }
 
-    hostname  = "${var.server_frontend["hostname"]}"
-    addresses = [ "192.168.2.30" ]
-    wait_for_lease = 1
-  }
-
-  # IMPORTANT
-  # Ubuntu can hang is a isa-serial is not present at boot time.
-  # If you find your CPU 100% and never is available this is why
   console {
     type        = "pty"
     target_port = "0"
@@ -277,9 +277,6 @@ resource "libvirt_domain" "cm-frontend" {
 #    wait_for_lease = 1
 #  }
 #
-#  # IMPORTANT
-#  # Ubuntu can hang is a isa-serial is not present at boot time.
-#  # If you find your CPU 100% and never is available this is why
 #  console {
 #    type        = "pty"
 #    target_port = "0"

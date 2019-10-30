@@ -10,4 +10,28 @@ firewalld_ports_open:
   - proto: tcp
     port: 42080
 
+coremedia_applications:
+  master_live_server:
+    artefact_name: master-live-server.war
+    artefact_checksum: f12912baa16e999ca6bf19e345b7605a72b55a2c
+  replication_live_server:
+    artefact_name: replication-live-server.war
+    artefact_checksum: cdbad2eaa39d715f3feaa63585b87c654bbe453d
 
+
+coremedia_licenses:
+  - { src: 'files/mls.zip', dest: '{{license_directory}}/' }
+  - { src: 'files/rls.zip', dest: '{{license_directory}}/' }
+
+master_live:
+  sql:
+    store:
+      url: 'jdbc:mysql://mysql.database.cm.local:3306/cm_master'
+
+replication_live:
+  sql:
+    store:
+      url: 'jdbc:mysql://mysql.database.cm.local:3306/cm_replication'
+  replicator:
+    publication:
+      ior_url: http://mls.frontend.cm.local:40280/master-live-server/ior

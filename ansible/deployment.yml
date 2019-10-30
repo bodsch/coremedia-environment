@@ -1,15 +1,18 @@
 ---
 
-- hosts: delivery,frontend,backend
+- hosts: frontend
   gather_facts: true
   become: yes
   remote_user: sysadm
   roles:
-    - role: tomcat
+    - role: cm-licenses
+    - role: master-live-server
+    - role: replication-live-server
 
 - hosts: backend
   gather_facts: true
   become: yes
   remote_user: sysadm
   roles:
+    - role: cm-licenses
     - role: content-management-server

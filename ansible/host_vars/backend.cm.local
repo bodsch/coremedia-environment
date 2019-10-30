@@ -8,12 +8,27 @@ firewalld_ports_open:
   - proto: tcp
     port: 40183
 
+coremedia_applications:
+  content_management_server:
+    artefact_name: content-management-server.war
+    artefact_checksum: "1605ba19b147b1696114e1123a532bfd8a86842f"
+  workflow_server:
+    archive_name: workflow-server.war
+    artefact_checksum: cdbad2eaa39d715f3feaa63585b87c654bbe453d
+
+
+
+
+coremedia_licenses:
+  - { src: 'files/cms.zip', dest: '{{license_directory}}/' }
+
 content_management:
   solr:
-    url: http://solr.int:40080/solr
+    url: http://backend.cm.local:40080/solr
+    collection_content: studio
   sql:
     store:
-      url: 'jdbc:mysql://mysql.database.int:3306/cm_management'
+      url: 'jdbc:mysql://mysql.database.cm.local:3306/cm_management'
   publisher:
     target:
-      ior_url: http://master-live-server.int:40280/coremedia/ior
+      ior_url: http://mls.frontend.cm.local:40280/master-live-server/ior
