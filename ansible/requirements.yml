@@ -32,7 +32,7 @@
 - name: coretto
   src: https://github.com/bodsch/ansible-coretto-java.git
   scm: git
-  version: 1.0.0
+  version: 1.0.1
 - name: chef-client
   src: https://gitlab.com/bodsch/ansible-coremedia-chef-client.git
   scm: git
@@ -57,8 +57,16 @@
 - name: tomcat
   src: https://gitlab.com/ansible-coremedia/tomcat.git
   scm: git
-  version: master
+  version: 1.0.0
 - name: content-management-server
   src: https://gitlab.com/ansible-coremedia/content-management-server.git
+  scm: git
+  version: master
+- name: master-live-server
+  src: https://gitlab.com/ansible-coremedia/master-live-server.git
+  scm: git
+  version: master
+- name: replication-live-server
+  src: https://gitlab.com/ansible-coremedia/replication-live-server.git
   scm: git
   version: master

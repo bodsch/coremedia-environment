@@ -21,12 +21,17 @@
     - python-dns
     - bind-utils
 
-- name: 'add subdomains to /etc/hosts'
+- name: add subdomains to /etc/hosts
   template:
     src: templates/hosts.j2
     dest: /etc/hosts
 
-- name: 'ensure unneeded services are stoped and disabled'
+- name: change bash_profile
+  template:
+    src: bash_profile.j2
+    dest: /root/.bash_profile
+
+- name: ensure unneeded services are stoped and disabled
   service:
     name: "{{ item }}"
     state: stopped
