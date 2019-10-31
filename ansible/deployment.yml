@@ -5,7 +5,9 @@
   become: yes
   remote_user: sysadm
   roles:
-    - role: cm-licenses
+#    - role: cm-licenses
+    - role: master-live-server_tools
+    - role: replication-live-server_tools
     - role: master-live-server
     - role: replication-live-server
 
@@ -14,5 +16,8 @@
   become: yes
   remote_user: sysadm
   roles:
-    - role: cm-licenses
+    - role: content-management-server_tools
+    - role: workflow-server_tools
+##    - role: cm-licenses
     - role: content-management-server
+    - role: workflow-server

@@ -9,12 +9,20 @@ firewalld_ports_open:
     port: 40183
 
 coremedia_applications:
+  content_management_server_tools:
+    artefact_name: cms-tools-application.zip
+    artefact_checksum: 4ecd1e78cef831ae86ee5f7d2ee81681150d7137
+  workflow_server_tools:
+    artefact_name: wfs-tools-application.zip
+    artefact_checksum: 35c7c5b0633aa56fa9ff754cc3f7c30cc597b369
+
+
   content_management_server:
     artefact_name: content-management-server.war
     artefact_checksum: "1605ba19b147b1696114e1123a532bfd8a86842f"
   workflow_server:
-    archive_name: workflow-server.war
-    artefact_checksum: cdbad2eaa39d715f3feaa63585b87c654bbe453d
+    artefact_name: workflow-server.war
+    artefact_checksum: b7c4efb0e66e83de43a09b3a5fba297688023ce7
 
 
 
@@ -32,3 +40,20 @@ content_management:
   publisher:
     target:
       ior_url: http://mls.frontend.cm.local:40280/master-live-server/ior
+  cap:
+    client:
+      server:
+        ior_url: http://backend.cm.local:40180/content-management-server/ior
+
+workflow_server:
+  sql:
+    store:
+      url: 'jdbc:mysql://mysql.database.cm.local:3306/cm_management'
+  cap:
+    client:
+      server:
+        ior_url: http://backend.cm.local:40180/content-management-server/ior
+  mongodb:
+    client_uri: mongodb://mongo.database.cm.local:27017/
+
+

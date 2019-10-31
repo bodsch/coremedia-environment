@@ -58,15 +58,41 @@
   src: https://gitlab.com/ansible-coremedia/tomcat.git
   scm: git
   version: 1.0.0
+- name: content-management-server_tools
+  src: https://gitlab.com/ansible-coremedia/content-management-server_tools.git
+  scm: git
+  version: 1.0.0
+- name: master-live-server_tools
+  src: https://gitlab.com/ansible-coremedia/master-live-server_tools.git
+  scm: git
+  version: 1.0.0
+- name: replication-live-server_tools
+  src: https://gitlab.com/ansible-coremedia/replication-live-server_tools.git
+  scm: git
+  version: 1.0.0
+- name: workflow-server_tools
+  src: https://gitlab.com/ansible-coremedia/workflow-server_tools.git
+  scm: git
+  version: 1.0.0
+
+
+
+
+
+
 - name: content-management-server
   src: https://gitlab.com/ansible-coremedia/content-management-server.git
   scm: git
-  version: master
+  version: 1.1.0
 - name: master-live-server
   src: https://gitlab.com/ansible-coremedia/master-live-server.git
   scm: git
-  version: master
+  version: 1.0.0
 - name: replication-live-server
   src: https://gitlab.com/ansible-coremedia/replication-live-server.git
   scm: git
-  version: master
+  version: 1.0.0
+- name: workflow-server
+  src: https://gitlab.com/ansible-coremedia/workflow-server.git
+  scm: git
+  version: 1.0.0

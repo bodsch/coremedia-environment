@@ -11,6 +11,13 @@ firewalld_ports_open:
     port: 42080
 
 coremedia_applications:
+  master_live_server_tools:
+    artefact_name: mls-tools-application.zip
+    artefact_checksum: c27376099015ac2d1f2ca10a7370b87be466c6ce
+  replication_live_server_tools:
+    artefact_name: rls-tools-application.zip
+    artefact_checksum: 1ae4e9d75913149fc4cf3a080d6bbc8a58ed5f7a
+
   master_live_server:
     artefact_name: master-live-server.war
     artefact_checksum: f12912baa16e999ca6bf19e345b7605a72b55a2c
@@ -27,6 +34,10 @@ master_live:
   sql:
     store:
       url: 'jdbc:mysql://mysql.database.cm.local:3306/cm_master'
+  cap:
+    client:
+      server:
+        ior_url: http://mls.frontend.cm.local:40280/master-live-server/ior
 
 replication_live:
   sql:
@@ -35,3 +46,7 @@ replication_live:
   replicator:
     publication:
       ior_url: http://mls.frontend.cm.local:40280/master-live-server/ior
+  cap:
+    client:
+      server:
+        ior_url: http://mls.frontend.cm.local:42080/replication-live-server/ior
