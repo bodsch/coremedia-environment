@@ -20,7 +20,7 @@ variable "server_database" {
   type = "map"
 
   default = {
-    "memory"    = 512
+    "memory"    = 1024
     "vcpu"      = 1
     "disk_size" = ""
     "ip"        = "192.168.124.10"
@@ -32,8 +32,8 @@ variable "server_backend" {
   type = "map"
 
   default = {
-    "memory"    = 512
-    "vcpu"      = 1
+    "memory"    = 2048
+    "vcpu"      = 2
     "disk_size" = ""
     "ip"        = "192.168.124.20"
     "hostname"  = "backend"
@@ -44,8 +44,8 @@ variable "server_frontend" {
   type = "map"
 
   default = {
-    "memory"    = 512
-    "vcpu"      = 1
+    "memory"    = 2048
+    "vcpu"      = 2
     "disk_size" = ""
     "ip"        = "192.168.124.30"
     "hostname"  = "frontend"
