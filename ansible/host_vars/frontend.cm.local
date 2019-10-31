@@ -17,6 +17,10 @@ coremedia_applications:
   replication_live_server_tools:
     artefact_name: rls-tools-application.zip
     artefact_checksum: 1ae4e9d75913149fc4cf3a080d6bbc8a58ed5f7a
+  caefeeder-live-tools:
+    artefact_name: caefeeder-tools-application.zip
+    artefact_checksum: 6938014f32acd6e086ba03cf001aa1bdacbc6122
+
 
   master_live_server:
     artefact_name: master-live-server.war
@@ -24,11 +28,23 @@ coremedia_applications:
   replication_live_server:
     artefact_name: replication-live-server.war
     artefact_checksum: cdbad2eaa39d715f3feaa63585b87c654bbe453d
+  caefeeder-live:
+    artefact_name: caefeeder-live.war
+    artefact_checksum: a54f4971c0dd9cd9b98d2652efb9882b12b839f8
+
+
+
+
+
+
+
 
 
 coremedia_licenses:
   - { src: 'files/mls.zip', dest: '{{license_directory}}/' }
   - { src: 'files/rls.zip', dest: '{{license_directory}}/' }
+
+
 
 master_live:
   sql:
@@ -50,3 +66,9 @@ replication_live:
     client:
       server:
         ior_url: http://mls.frontend.cm.local:42080/replication-live-server/ior
+
+caefeeder:
+
+  sql:
+    store:
+      url: "jdbc:mysql://mysql.database.cm.local:3306/{{ application_database.name}}"

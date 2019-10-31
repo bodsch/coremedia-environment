@@ -8,16 +8,32 @@
 #    - role: cm-licenses
     - role: master-live-server_tools
     - role: replication-live-server_tools
+    - role: caefeeder_tools
+      vars:
+        - coremedia_application_name: caefeeder-live-tools
+        - application_database:
+            name: cm_caefeeder
+            user: cm_caefeeder
+            password: cm_caefeeder
     - role: master-live-server
     - role: replication-live-server
+    - role: caefeeder-live
 
 - hosts: backend
   gather_facts: true
   become: yes
   remote_user: sysadm
   roles:
+#    - role: cm-licenses
     - role: content-management-server_tools
     - role: workflow-server_tools
-##    - role: cm-licenses
+    - role: caefeeder_tools
+      vars:
+        - coremedia_application_name: caefeeder-preview-tools
+        - application_database:
+            name: cm_mcaefeeder
+            user: cm_mcaefeeder
+            password: cm_mcaefeeder
     - role: content-management-server
     - role: workflow-server
+    - role: caefeeder-preview

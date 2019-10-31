@@ -15,15 +15,20 @@ coremedia_applications:
   workflow_server_tools:
     artefact_name: wfs-tools-application.zip
     artefact_checksum: 35c7c5b0633aa56fa9ff754cc3f7c30cc597b369
+  caefeeder-preview-tools:
+    artefact_name: caefeeder-tools-application.zip
+    artefact_checksum: 6938014f32acd6e086ba03cf001aa1bdacbc6122
 
 
   content_management_server:
     artefact_name: content-management-server.war
-    artefact_checksum: "1605ba19b147b1696114e1123a532bfd8a86842f"
+    artefact_checksum: 1605ba19b147b1696114e1123a532bfd8a86842f
   workflow_server:
     artefact_name: workflow-server.war
     artefact_checksum: b7c4efb0e66e83de43a09b3a5fba297688023ce7
-
+  caefeeder-preview:
+    artefact_name: caefeeder-preview.war
+    artefact_checksum: be257c5d905f2e7949f0b08abda29359fbdd18cf
 
 
 
@@ -55,5 +60,11 @@ workflow_server:
         ior_url: http://backend.cm.local:40180/content-management-server/ior
   mongodb:
     client_uri: mongodb://mongo.database.cm.local:27017/
+
+caefeeder:
+
+  sql:
+    store:
+      url: "jdbc:mysql://mysql.database.cm.local:3306/{{ application_database.name}}"
 
 
