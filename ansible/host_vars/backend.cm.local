@@ -8,6 +8,8 @@ firewalld_ports_open:
   - proto: tcp
     port: 40183
 
+artefact_url: "http://localhost/coremedia/{{ coremedia_version }}"
+
 coremedia_applications:
   content_management_server_tools:
     artefact_name: cms-tools-application.zip
@@ -29,7 +31,9 @@ coremedia_applications:
   caefeeder-preview:
     artefact_name: caefeeder-preview.war
     artefact_checksum: be257c5d905f2e7949f0b08abda29359fbdd18cf
-
+  content-feeder:
+    artefact_name: content-feeder.war
+    artefact_checksum: 87b3ee3782ce54088d34e414569a48b595769a72
 
 
 coremedia_licenses:

@@ -37,3 +37,4 @@
     - role: content-management-server
     - role: workflow-server
     - role: caefeeder-preview
+    - role: content-feeder
