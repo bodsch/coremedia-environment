@@ -25,6 +25,7 @@
   remote_user: sysadm
   roles:
 #    - role: cm-licenses
+    - role: theme-importer_tools
     - role: content-management-server_tools
     - role: workflow-server_tools
     - role: caefeeder_tools
@@ -38,3 +39,6 @@
     - role: workflow-server
     - role: caefeeder-preview
     - role: content-feeder
+    - role: elastic-worker
+    - role: user-changes
+    - role: studio

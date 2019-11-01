@@ -20,7 +20,9 @@ coremedia_applications:
   caefeeder-preview-tools:
     artefact_name: caefeeder-tools-application.zip
     artefact_checksum: 6938014f32acd6e086ba03cf001aa1bdacbc6122
-
+  theme-importer-tools:
+    artefact_name: theme-importer-application.zip
+    artefact_checksum: ffb9c2079d4220cf022052390d9ece4c184905a4
 
   content_management_server:
     artefact_name: content-management-server.war
@@ -34,7 +36,15 @@ coremedia_applications:
   content-feeder:
     artefact_name: content-feeder.war
     artefact_checksum: 87b3ee3782ce54088d34e414569a48b595769a72
-
+  elastic-worker:
+    artefact_name: elastic-worker.war
+    artefact_checksum: 957ad8f121c47522822b9451a206afe332fb271a
+  user-changes:
+    artefact_name: user-changes.war
+    artefact_checksum: 89eee0a2f8b771052d14f988a89636b926274b1b
+  studio:
+    artefact_name: studio.war
+    artefact_checksum: 9cb59b7927f9b272d1aaa11d8907dd2a9624d0ea
 
 coremedia_licenses:
   - { src: 'files/cms.zip', dest: '{{license_directory}}/' }

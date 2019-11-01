@@ -78,6 +78,10 @@
   src: https://gitlab.com/ansible-coremedia/caefeeder_tools.git
   scm: git
   version: 1.0.0
+- name: theme-importer_tools
+  src: https://gitlab.com/ansible-coremedia/theme-importer_tools.git
+  scm: git
+  version: 1.0.0
 
 #- name: license-manager
 #  src: https://gitlab.com/ansible-coremedia/license-manager.git
@@ -92,15 +96,15 @@
 - name: master-live-server
   src: https://gitlab.com/ansible-coremedia/master-live-server.git
   scm: git
-  version: 1.0.1
+  version: 1.0.2
 - name: replication-live-server
   src: https://gitlab.com/ansible-coremedia/replication-live-server.git
   scm: git
-  version: 1.0.1
+  version: 1.0.2
 - name: workflow-server
   src: https://gitlab.com/ansible-coremedia/workflow-server.git
   scm: git
-  version: 1.0.1
+  version: 1.0.2
 - name: caefeeder-live
   src: https://gitlab.com/ansible-coremedia/caefeeder-live.git
   scm: git
@@ -112,4 +116,17 @@
 - name: content-feeder
   src: https://gitlab.com/ansible-coremedia/content-feeder.git
   scm: git
-  version: master
+  version: 1.0.0
+- name: elastic-worker
+  src: https://gitlab.com/ansible-coremedia/elastic-worker.git
+  scm: git
+  version: 1.0.0
+- name: user-changes
+  src: https://gitlab.com/ansible-coremedia/user-changes.git
+  scm: git
+  version: 1.0.0
+
+- name: studio
+  src: https://gitlab.com/ansible-coremedia/studio.git
+  scm: git
+  version: 1.0.0
