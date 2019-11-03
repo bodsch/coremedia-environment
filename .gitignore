@@ -1,2 +1,7 @@
 __pycache__
 
+ansible/*.retry
+ansible/roles/*
+ansible/files/*.zip
+ansible/files/*.war
+ansible/files/*.jar

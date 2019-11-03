@@ -14,7 +14,7 @@ server_database = {
 
 server_backend = {
 
-  "memory"    = 512
+  "memory"    = 3072
   "vcpu"      = 1
   "disk_size" = "10737418240"
   "ip"        = "192.168.124.20"
@@ -22,7 +22,7 @@ server_backend = {
 }
 
 server_frontend = {
-  "memory"    = 512
+  "memory"    = 3072
   "vcpu"      = 1
   "disk_size" = "10737418240"
   "ip"        = "192.168.124.30"
@@ -30,7 +30,7 @@ server_frontend = {
 }
 
 server_delivery = {
-  "memory"    = 512
+#   "memory"    = 512
   "vcpu"      = 1
   "disk_size" = "10737418240"
   "ip"        = "192.168.124.35"

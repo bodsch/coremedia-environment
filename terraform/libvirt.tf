@@ -74,12 +74,12 @@ resource "libvirt_volume" "cm-frontend-qcow2" {
   size           = "${var.server_frontend["disk_size"]}"
 }
 
-#resource "libvirt_volume" "cm-delivery-qcow2" {
-#  name           = "cm-${var.server_delivery["hostname"]}.qcow2"
-#  base_volume_id = "${libvirt_volume.base_vol.id}"
-#  pool           = "default"
-#  size           = "${var.server_delivery["disk_size"]}"
-#}
+resource "libvirt_volume" "cm-delivery-qcow2" {
+  name           = "cm-${var.server_delivery["hostname"]}.qcow2"
+  base_volume_id = "${libvirt_volume.base_vol.id}"
+  pool           = "default"
+  size           = "${var.server_delivery["disk_size"]}"
+}
 
 
 # Use CloudInit to add our ssh-key to the instance
@@ -262,40 +262,40 @@ resource "libvirt_domain" "cm-frontend" {
   }
 }
 
-#resource "libvirt_domain" "cm-delivery" {
-#  name   = "${var.server_delivery["hostname"]}"
-#  memory = "${var.server_delivery["memory"]}"
-#  vcpu   = "${var.server_delivery["vcpu"]}"
-#
-#  cloudinit = "${libvirt_cloudinit_disk.commoninit.id}"
-#
-#  network_interface {
-#    network_id = "${libvirt_network.vm_network.id}"
-#
-#    hostname  = "${var.server_delivery["hostname"]}"
-#    addresses = [ "${var.server_delivery["ip"]}" ]
-#    wait_for_lease = 1
-#  }
-#
-#  console {
-#    type        = "pty"
-#    target_port = "0"
-#    target_type = "serial"
-#  }
-#
-#  console {
-#    type        = "pty"
-#    target_type = "virtio"
-#    target_port = "1"
-#  }
-#
-#  disk {
-#    volume_id = "${libvirt_volume.cm-delivery-qcow2.id}"
-#  }
-#
-#  graphics {
-#    type = "spice"
-#    listen_type = "address"
-#    autoport = true
-#  }
-#}
+resource "libvirt_domain" "cm-delivery" {
+  name   = "${var.server_delivery["hostname"]}"
+  memory = "${var.server_delivery["memory"]}"
+  vcpu   = "${var.server_delivery["vcpu"]}"
+
+  cloudinit = "${libvirt_cloudinit_disk.commoninit.id}"
+
+  network_interface {
+    network_id = "${libvirt_network.vm_network.id}"
+
+    hostname  = "${var.server_delivery["hostname"]}"
+    addresses = [ "${var.server_delivery["ip"]}" ]
+    wait_for_lease = 1
+  }
+
+  console {
+    type        = "pty"
+    target_port = "0"
+    target_type = "serial"
+  }
+
+  console {
+    type        = "pty"
+    target_type = "virtio"
+    target_port = "1"
+  }
+
+  disk {
+    volume_id = "${libvirt_volume.cm-delivery-qcow2.id}"
+  }
+
+  graphics {
+    type = "spice"
+    listen_type = "address"
+    autoport = true
+  }
+}
