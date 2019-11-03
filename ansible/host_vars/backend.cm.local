@@ -3,48 +3,64 @@
 firewalld_ports_open:
   - proto: tcp
     port: 22
-  - proto: tcp
-    port: 40180
-  - proto: tcp
-    port: 40183
+#   - proto: tcp
+#     port: 40180
+#   - proto: tcp
+#     port: 40183
 
-artefact_url: "http://localhost/coremedia/{{ coremedia_version }}"
+artefact_url: "{{ artefact_server }}/{{ application_version }}"
 
 coremedia_applications:
   content_management_server_tools:
+    artefact_url: "{{ artefact_server }}/{{ application_version }}"
     artefact_name: cms-tools-application.zip
     artefact_checksum: 4ecd1e78cef831ae86ee5f7d2ee81681150d7137
   workflow_server_tools:
+    artefact_url: "{{ artefact_server }}/{{ application_version }}"
     artefact_name: wfs-tools-application.zip
     artefact_checksum: 35c7c5b0633aa56fa9ff754cc3f7c30cc597b369
   caefeeder-preview-tools:
+    artefact_url: "{{ artefact_server }}/{{ application_version }}"
     artefact_name: caefeeder-tools-application.zip
     artefact_checksum: 6938014f32acd6e086ba03cf001aa1bdacbc6122
   theme-importer-tools:
+    artefact_url: "{{ artefact_server }}/{{ application_version }}"
     artefact_name: theme-importer-application.zip
     artefact_checksum: ffb9c2079d4220cf022052390d9ece4c184905a4
 
   content_management_server:
+    artefact_url: "{{ artefact_server }}/{{ application_version }}"
     artefact_name: content-management-server.war
     artefact_checksum: 1605ba19b147b1696114e1123a532bfd8a86842f
   workflow_server:
+    artefact_url: "{{ artefact_server }}/{{ application_version }}"
     artefact_name: workflow-server.war
     artefact_checksum: b7c4efb0e66e83de43a09b3a5fba297688023ce7
   caefeeder-preview:
+    artefact_url: "{{ artefact_server }}/{{ application_version }}"
     artefact_name: caefeeder-preview.war
     artefact_checksum: be257c5d905f2e7949f0b08abda29359fbdd18cf
   content-feeder:
+    artefact_url: "{{ artefact_server }}/{{ application_version }}"
     artefact_name: content-feeder.war
     artefact_checksum: 87b3ee3782ce54088d34e414569a48b595769a72
   elastic-worker:
+    artefact_url: "{{ artefact_server }}/{{ application_version }}"
     artefact_name: elastic-worker.war
     artefact_checksum: 957ad8f121c47522822b9451a206afe332fb271a
   user-changes:
+    artefact_url: "{{ artefact_server }}/{{ application_version }}"
     artefact_name: user-changes.war
     artefact_checksum: 89eee0a2f8b771052d14f988a89636b926274b1b
   studio:
+    artefact_url: "{{ artefact_server }}/{{ application_version }}"
     artefact_name: studio.war
     artefact_checksum: 9cb59b7927f9b272d1aaa11d8907dd2a9624d0ea
+  cae-preview:
+    artefact_url: "{{ artefact_server }}/{{ application_version }}"
+    artefact_name: cae-preview.war
+    artefact_checksum: aa4ce07bb8cc69b7e1f0fef1703af197da86cd84
+
 
 coremedia_licenses:
   - { src: 'files/cms.zip', dest: '{{license_directory}}/' }

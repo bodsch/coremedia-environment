@@ -1,0 +1,10 @@
+
+- debug:
+    var: "{{item}}"
+  when: item is defined
+  loop:
+    - artefact_name
+    - local_application_checksum
+    - application_checksum
+
+

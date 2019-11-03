@@ -1,0 +1,6 @@
+---
+# all parameters for ann CoreMedia system
+#
+
+artefact_server: "http://192.168.124.1"
+application_version: 1904.2

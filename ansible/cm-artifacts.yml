@@ -1,0 +1,12 @@
+---
+
+# prepare all coremedia machines
+- hosts: delivery,frontend,backend
+  gather_facts: true
+  become: yes
+  remote_user: coremedia-ci
+  roles:
+    - role: common
+    - role: chef-client
+    - role: oracle-java
+    - role: cm-artifacts

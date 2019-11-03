@@ -1,0 +1,22 @@
+---
+
+# overwrite some defaults variables of roles
+# take a look into roles/*/defaults/main.yml !
+
+chefdk_version: 12.8.1
+
+maven_opts: '--threads 2C -DskipTests=true'
+
+sencha_version: 6.5.3.6
+sencha_memory_max_heap: 2G
+sencha_memory_inital_heap: 1G
+
+phantomjs_version: 2.1.1
+
+deploy_mysql_version: '5.7.23-1.el6'
+
+# -----------------------------------------------------------------------------------
+
+# workspace_version is moved to group_vars/all
+
+# aws_* is moved to group_vars/local

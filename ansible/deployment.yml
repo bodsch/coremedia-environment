@@ -1,5 +1,20 @@
 ---
 
+- hosts: delivery
+  gather_facts: true
+  become: yes
+  remote_user: sysadm
+  roles:
+    - role: cae-live
+      vars:
+        - cae_live_id: 1
+    - role: cae-live
+      vars:
+        - cae_live_id: 2
+    - role: cae-live
+      vars:
+        - cae_live_id: 3
+
 - hosts: frontend
   gather_facts: true
   become: yes
@@ -18,6 +33,7 @@
     - role: master-live-server
     - role: replication-live-server
     - role: caefeeder-live
+
 
 - hosts: backend
   gather_facts: true
@@ -42,3 +58,4 @@
     - role: elastic-worker
     - role: user-changes
     - role: studio
+    - role: cae-preview

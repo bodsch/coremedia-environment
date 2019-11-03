@@ -3,41 +3,44 @@
 firewalld_ports_open:
   - proto: tcp
     port: 22
-  - proto: tcp
-    port: 40080
-  - proto: tcp
-    port: 40280
-  - proto: tcp
-    port: 42080
+#   - proto: tcp
+#     port: 40080
+#   - proto: tcp
+#     port: 40280
+#   - proto: tcp
+#     port: 42080
+
+artefact_url: "{{ artefact_server }}/{{ application_version }}"
+
+tomcat_artefact_url: "{{ artefact_server }}/{{ application_version }}"
 
 coremedia_applications:
+
   master_live_server_tools:
+    artefact_url: "{{ artefact_server }}/{{ application_version }}"
     artefact_name: mls-tools-application.zip
     artefact_checksum: c27376099015ac2d1f2ca10a7370b87be466c6ce
   replication_live_server_tools:
+    artefact_url: "{{ artefact_server }}/{{ application_version }}"
     artefact_name: rls-tools-application.zip
     artefact_checksum: 1ae4e9d75913149fc4cf3a080d6bbc8a58ed5f7a
   caefeeder-live-tools:
+    artefact_url: "{{ artefact_server }}/{{ application_version }}"
     artefact_name: caefeeder-tools-application.zip
     artefact_checksum: 6938014f32acd6e086ba03cf001aa1bdacbc6122
 
-
   master_live_server:
+    artefact_url: "{{ artefact_server }}/{{ application_version }}"
     artefact_name: master-live-server.war
     artefact_checksum: f12912baa16e999ca6bf19e345b7605a72b55a2c
   replication_live_server:
+    artefact_url: "{{ artefact_server }}/{{ application_version }}"
     artefact_name: replication-live-server.war
     artefact_checksum: cdbad2eaa39d715f3feaa63585b87c654bbe453d
   caefeeder-live:
+    artefact_url: "{{ artefact_server }}/{{ application_version }}"
     artefact_name: caefeeder-live.war
     artefact_checksum: a54f4971c0dd9cd9b98d2652efb9882b12b839f8
-
-
-
-
-
-
-
 
 
 coremedia_licenses:

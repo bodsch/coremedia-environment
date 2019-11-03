@@ -5,3 +5,8 @@ firewalld_ports_open:
     port: 22
 
 
+coremedia_applications:
+  cae-live:
+    artefact_url: "{{ artefact_server }}/{{ application_version }}"
+    artefact_name: cae-live.war
+    artefact_checksum: f4c8880f7e145fd5611e908a5fa97c34e8991ffa
