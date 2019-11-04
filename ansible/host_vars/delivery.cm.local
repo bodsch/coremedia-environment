@@ -10,3 +10,32 @@ coremedia_applications:
     artefact_url: "{{ artefact_server }}/{{ application_version }}"
     artefact_name: cae-live.war
     artefact_checksum: f4c8880f7e145fd5611e908a5fa97c34e8991ffa
+
+
+apache_vhosts:
+  - servername: "studio.{{ ansible_fqdn }}"
+    documentroot: "/var/www/html"
+    extra_parameters: |
+      ###    Rewrite
+      RewriteCond %{HTTPS} off
+      RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI}
+      RewriteRule ^/$ /studio/$1 [R=301,L]
+      ###    Proxy
+      ProxyPreserveHost On
+      ProxyPass                  /studio/ http://{{ ansible_fqdn }}:41080/studio/
+      ProxyPassReverse           /studio/ http://{{ ansible_fqdn }}:41080/studio
+      ProxyPassReverseCookiePath /studio /
+      ProxyPass                  / http://{{ ansible_fqdn }}:41080/studio/
+      ###    Logging
+      LogLevel warn rewrite:trace1
+      ErrorLog  /var/log/httpd/studio-error.log
+      CustomLog /var/log/httpd/studio-access.log combined
+
+apache_mods_enabled:
+  - rewrite.load
+
+
+
+apache_ignore_missing_ssl_certificate: true
+
+
