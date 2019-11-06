@@ -3,12 +3,15 @@
 firewalld_ports_open:
   - proto: tcp
     port: 22
+  - proto: tcp
+    port: 80
 #   - proto: tcp
 #     port: 40180
 #   - proto: tcp
 #     port: 40183
 
 artefact_url: "{{ artefact_server }}/{{ application_version }}"
+tomcat_artefact_url: "{{ artefact_server }}/{{ application_version }}"
 
 coremedia_applications:
   content_management_server_tools:
@@ -97,4 +100,75 @@ caefeeder:
     store:
       url: "jdbc:mysql://mysql.database.cm.local:3306/{{ application_database.name}}"
 
+# ----------------------------------------------------------------------------
 
+nginx_error_log: "/var/log/nginx/error.log warn"
+nginx_access_log: "/var/log/nginx/access.log main buffer=16k"
+nginx_server_tokens: "off"
+nginx_multi_accept: "on"
+
+nginx_extra_http_options: |
+  proxy_buffering    off;
+  proxy_set_header   X-Real-IP $remote_addr;
+  proxy_set_header   X-Scheme $scheme;
+  proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+  proxy_set_header   Host $http_host;
+
+nginx_upstreams:
+  - name: studio
+    servers:
+      - 127.0.0.1:41080 max_fails=3 fail_timeout=30s
+  - name: content-management-server
+    servers:
+      - 127.0.0.1:40180 max_fails=3 fail_timeout=30s
+  - name: workflow-server
+    servers:
+      - 127.0.0.1:40380 max_fails=3 fail_timeout=30s
+
+nginx_vhosts:
+  # https://winginx.com/en/htaccess
+  - listen: "80"
+    server_name: 'studio.{{ ansible_fqdn }}'
+    filename: '20-studio.{{ ansible_fqdn }}.conf'
+    root: /var/www/html
+    index: index.html
+    access_log: '/var/log/nginx/studio_access.log'
+    error_log:  '/var/log/nginx/studio_error.log'
+    extra_parameters: |
+      location ^~ / {
+        add_header X-Backend "studio";
+
+        proxy_pass         http://studio/studio/;
+        proxy_set_header   Host              $host;
+        proxy_set_header   X-Real-IP         $remote_addr;
+        proxy_set_header   X-Forwarded-For   $proxy_add_x_forwarded_for;
+        proxy_set_header   X-Forwarded-Proto $scheme;
+      }
+
+      # location / {
+      #   rewrite ^(.*)$ https://$http_host$request_uri redirect;
+      #   rewrite ^/$ /studio/$1 redirect;
+      # }
+  - listen: 80
+    server_name: sitemanager.{{ ansible_fqdn }}
+    filename: 20-sitemanager.{{ ansible_fqdn }}.conf
+    root: /var/www/html
+    index: index.html
+    access_log: /var/log/nginx/sitemanager_access.log
+    error_log:  /var/log/nginx/sitemanager_error.log
+    extra_parameters: |
+      location /editor {
+        rewrite ^/editor-webstart/(.*) /editor-webstart/$1 break;
+      }
+
+      location /coremedia {
+        rewrite ^/coremedia/(.*) http://content-management-server/content-management-server/ior redirect;
+      }
+
+      location /workflow {
+        rewrite ^/workflow/(.*) http://workflow-server/workflow-server/ior redirect;
+      }
+
+      location / {
+        rewrite ^/(.*) /editor-webstart/$1 break;
+      }

@@ -10,9 +10,6 @@
 - name: mongodb
   src: https://github.com/UnderGreen/ansible-role-mongodb.git
   version: v2.6.0
-- name: redis
-  src: https://github.com/geerlingguy/ansible-role-redis.git
-  version: 1.6.0
 - name: firewalld
   src: https://github.com/oasis-roles/firewalld.git
   version: master
@@ -25,6 +22,9 @@
 - name: prometheus
   src: https://github.com/cloudalchemy/ansible-prometheus.git
   version: 2.11.0
+- name: redis
+  src: https://github.com/geerlingguy/ansible-role-redis.git
+  version: 1.6.0
 - name: nginx
   src: https://github.com/geerlingguy/ansible-role-nginx.git
   version: 2.6.1
@@ -60,7 +60,7 @@
 - name: tomcat
   src: https://gitlab.com/ansible-coremedia/tomcat.git
   scm: git
-  version: 1.1.0
+  version: master
 - name: content-management-server_tools
   src: https://gitlab.com/ansible-coremedia/content-management-server_tools.git
   scm: git
@@ -90,7 +90,10 @@
 #  src: https://gitlab.com/ansible-coremedia/license-manager.git
 #  scm: git
 #  version: master
-
+- name: solr
+  src: https://gitlab.com/ansible-coremedia/solr.git
+  scm: git
+  version: master
 - name: content-management-server
   src: https://gitlab.com/ansible-coremedia/content-management-server.git
   scm: git
@@ -133,5 +136,13 @@
   version: master
 - name: cae-live
   src: https://gitlab.com/ansible-coremedia/cae-live.git
+  scm: git
+  version: master
+- name: cae-preview
+  src: https://gitlab.com/ansible-coremedia/cae-preview.git
+  scm: git
+  version: master
+- name: overview
+  src: https://gitlab.com/ansible-coremedia/overview.git
   scm: git
   version: master

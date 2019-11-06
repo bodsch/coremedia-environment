@@ -3,7 +3,11 @@
 firewalld_ports_open:
   - proto: tcp
     port: 22
+  - proto: tcp
+    port: 80
 
+
+tomcat_artefact_url: "{{ artefact_server }}/{{ application_version }}"
 
 coremedia_applications:
   cae-live:
@@ -11,31 +15,57 @@ coremedia_applications:
     artefact_name: cae-live.war
     artefact_checksum: f4c8880f7e145fd5611e908a5fa97c34e8991ffa
 
+# ----------------------------------------------------------------------------
 
-apache_vhosts:
-  - servername: "studio.{{ ansible_fqdn }}"
-    documentroot: "/var/www/html"
+nginx_error_log: "/var/log/nginx/error.log warn"
+nginx_access_log: "/var/log/nginx/access.log main buffer=16k"
+nginx_server_tokens: "off"
+nginx_multi_accept: "on"
+
+nginx_extra_http_options: |
+  proxy_buffering    off;
+  proxy_set_header   X-Real-IP $remote_addr;
+  proxy_set_header   X-Scheme $scheme;
+  proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+  proxy_set_header   Host $http_host;
+
+
+nginx_vhosts:
+
+  - listen: "80"
+    server_name: 'overview.{{ ansible_fqdn }}'
+    filename: 'overview.{{ ansible_fqdn }}.conf'
+    root: /var/www/html/overview
+    index: index.html
+    access_log: '/var/log/nginx/overview_access.log'
+    error_log:  '/var/log/nginx/overview_error.log'
     extra_parameters: |
-      ###    Rewrite
-      RewriteCond %{HTTPS} off
-      RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI}
-      RewriteRule ^/$ /studio/$1 [R=301,L]
-      ###    Proxy
-      ProxyPreserveHost On
-      ProxyPass                  /studio/ http://{{ ansible_fqdn }}:41080/studio/
-      ProxyPassReverse           /studio/ http://{{ ansible_fqdn }}:41080/studio
-      ProxyPassReverseCookiePath /studio /
-      ProxyPass                  / http://{{ ansible_fqdn }}:41080/studio/
-      ###    Logging
-      LogLevel warn rewrite:trace1
-      ErrorLog  /var/log/httpd/studio-error.log
-      CustomLog /var/log/httpd/studio-access.log combined
+      location / {
+        if (-f $document_root/system/maintenance.html) {
+          return 503;
+        }
 
-apache_mods_enabled:
-  - rewrite.load
-
-
-
-apache_ignore_missing_ssl_certificate: true
-
-
+        try_files $uri $uri/index.html $uri.html =404;
+      }
+#      location / {
+#        add_header X-Backend "grafana";
+#        proxy_pass http://grafana/;
+#        proxy_http_version 1.1;
+#        proxy_set_header Upgrade $http_upgrade;
+#        proxy_set_header Connection "upgrade";
+#        proxy_set_header X-Real-IP $remote_addr;
+#        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+#        proxy_set_header Host $host;
+#        proxy_redirect off;
+#      }
+#
+#
+#      location /dist {
+#        allow 127.0.0.1;
+#        allow 172.20.6.165;
+#        allow 172.20.6.166;
+#        allow 172.20.6.169;
+#        allow 172.20.6.170;
+#        allow 172.20.6.171;
+#        deny all;
+#      }

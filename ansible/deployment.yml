@@ -7,13 +7,9 @@
   roles:
     - role: cae-live
       vars:
-        - cae_live_id: 1
-    - role: cae-live
-      vars:
-        - cae_live_id: 2
-    - role: cae-live
-      vars:
-        - cae_live_id: 3
+        - instances: 2
+    - role: nginx
+    - role: overview
 
 - hosts: frontend
   gather_facts: true
@@ -40,6 +36,8 @@
   become: yes
   remote_user: sysadm
   roles:
+    - role: solr
+    - role: nginx
 #    - role: cm-licenses
     - role: theme-importer_tools
     - role: content-management-server_tools
@@ -59,3 +57,4 @@
     - role: user-changes
     - role: studio
     - role: cae-preview
+
