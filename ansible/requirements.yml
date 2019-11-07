@@ -32,6 +32,10 @@
   src: https://github.com/geerlingguy/ansible-role-apache.git
   version: 3.1.0
 
+- name: ulimit
+  src: https://github.com/picotrading/ansible-ulimit.git
+  version: master
+
 - name: coretto
   src: https://github.com/bodsch/ansible-coretto-java.git
   scm: git

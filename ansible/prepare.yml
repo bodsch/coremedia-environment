@@ -12,3 +12,5 @@
     - role: firewalld
     - role: coretto
     - role: tomcat
+    - role: ulimit
+    - role: dnsmasq

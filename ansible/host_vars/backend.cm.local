@@ -10,6 +10,25 @@ firewalld_ports_open:
 #   - proto: tcp
 #     port: 40183
 
+ulimit_config:
+  - domain: solr
+    type: hard
+    item: nofile
+    value: 65535
+  - domain: solr
+    type: soft
+    item: nofile
+    value: 65535
+  - domain: solr
+    type: hard
+    item: nproc
+    value: 65535
+  - domain: solr
+    type: soft
+    item: nproc
+    value: 65535
+
+
 artefact_url: "{{ artefact_server }}/{{ application_version }}"
 tomcat_artefact_url: "{{ artefact_server }}/{{ application_version }}"
 

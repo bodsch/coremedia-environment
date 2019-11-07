@@ -5,6 +5,7 @@
   become: yes
   remote_user: sysadm
   roles:
+    - dnsmasq
     - role: cae-live
       vars:
         - instances: 2
@@ -26,6 +27,7 @@
             name: cm_caefeeder
             user: cm_caefeeder
             password: cm_caefeeder
+    - role: solr
     - role: master-live-server
     - role: replication-live-server
     - role: caefeeder-live
@@ -36,8 +38,8 @@
   become: yes
   remote_user: sysadm
   roles:
-    - role: solr
-    - role: nginx
+    - ulimit
+    - dnsmasq
 #    - role: cm-licenses
     - role: theme-importer_tools
     - role: content-management-server_tools
@@ -49,6 +51,8 @@
             name: cm_mcaefeeder
             user: cm_mcaefeeder
             password: cm_mcaefeeder
+    - role: solr
+    - role: nginx
     - role: content-management-server
     - role: workflow-server
     - role: caefeeder-preview
