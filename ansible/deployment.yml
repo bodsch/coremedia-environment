@@ -1,23 +1,30 @@
 ---
 
+- hosts: frontend,backend
+  gather_facts: true
+  become: yes
+  remote_user: sysadm
+  roles:
+    - role: license-manager
+
+
 - hosts: delivery
   gather_facts: true
   become: yes
   remote_user: sysadm
   roles:
-    - dnsmasq
     - role: cae-live
       vars:
         - instances: 2
     - role: nginx
     - role: overview
 
+
 - hosts: frontend
   gather_facts: true
   become: yes
   remote_user: sysadm
   roles:
-#    - role: cm-licenses
     - role: master-live-server_tools
     - role: replication-live-server_tools
     - role: caefeeder_tools
@@ -38,9 +45,6 @@
   become: yes
   remote_user: sysadm
   roles:
-    - ulimit
-    - dnsmasq
-#    - role: cm-licenses
     - role: theme-importer_tools
     - role: content-management-server_tools
     - role: workflow-server_tools
@@ -61,4 +65,3 @@
     - role: user-changes
     - role: studio
     - role: cae-preview
-

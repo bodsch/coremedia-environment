@@ -17,7 +17,17 @@ In the configurations, please only define the values that differ from the respec
 
 ### download all playbooks from different repositories
 ```
-ansible-galaxy install -r requirements.yml
+ansible-galaxy install -r requirements.yml [--force]
 ```
 
+## prepare destination hosts
 
+```
+ansible-playbook -i hosts -e @coremedia-config.yml  prepare.yml
+```
+
+## deploy CoreMedia services
+
+```
+ansible-playbook -i hosts -e @coremedia-config.yml  deployment.yml
+```

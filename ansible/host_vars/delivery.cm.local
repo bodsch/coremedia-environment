@@ -7,7 +7,7 @@ firewalld_ports_open:
     port: 80
 
 
-tomcat_artefact_url: "{{ artefact_server }}/{{ application_version }}"
+# tomcat_artefact_url: "{{ artefact_server }}/{{ application_version }}"
 
 coremedia_applications:
   cae-live:

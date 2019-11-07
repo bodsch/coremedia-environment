@@ -1,4 +1,15 @@
 ---
+- hosts: all
+  gather_facts: true
+  become: yes
+  remote_user: sysadm
+  environment:
+    NETRC: ''
+  roles:
+    - role: common
+    - role: firewalld
+    - role: ulimit
+    - role: dnsmasq
 
 # prepare all coremedia machines
 - hosts: delivery,frontend,backend
@@ -8,9 +19,14 @@
   environment:
     NETRC: ''
   roles:
-    - role: common
-    - role: firewalld
     - role: coretto
     - role: tomcat
-    - role: ulimit
-    - role: dnsmasq
+
+# prepare the databases
+- hosts: database
+  gather_facts: true
+  become: yes
+  remote_user: sysadm
+  roles:
+    - role: mongodb
+    - role: mariadb
