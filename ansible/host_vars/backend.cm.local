@@ -35,13 +35,21 @@ coremedia_license_artifacts:
 coremedia_licenses:
   - { src: 'files/cms.zip', dest: '{{license_directory}}/' }
 
+
+content_management_database:
+  host: mysql.database.cm.local
+
+
+caefeeder_preview_database:
+  host: mysql.database.cm.local
+
+
+
 content_management:
   solr:
     url: http://backend.cm.local:40080/solr
     collection_content: studio
-  sql:
-    store:
-      url: 'jdbc:mysql://mysql.database.cm.local:3306/cm_management'
+
   publisher:
     target:
       ior_url: http://mls.frontend.cm.local:40280/master-live-server/ior
@@ -51,9 +59,7 @@ content_management:
         ior_url: http://backend.cm.local:40180/content-management-server/ior
 
 workflow_server:
-  sql:
-    store:
-      url: 'jdbc:mysql://mysql.database.cm.local:3306/cm_management'
+
   cap:
     client:
       server:
@@ -61,11 +67,32 @@ workflow_server:
   mongodb:
     client_uri: mongodb://mongo.database.cm.local:27017/
 
-caefeeder:
+content_feeder:
 
-  sql:
-    store:
-      url: "jdbc:mysql://mysql.database.cm.local:3306/{{ application_database.name}}"
+  repository:
+    url: http://backend.cm.local:40180/content-management-server/ior
+
+  solr:
+    url: http://backend.cm.local:40080/solr
+
+caefeeder_preview:
+
+  solr:
+    url: http://backend.cm.local:40080/solr
+
+
+elastic_worker:
+
+  repository:
+    url: http://backend.cm.local:40180/content-management-server/ior
+
+  elastic:
+    solr:
+      url: http://backend.cm.local:40080/solr
+
+  # mongodb ??
+  #mongodb:
+  #  client_uri: mongodb://mongo.database.cm.local:27017/
 
 # ----------------------------------------------------------------------------
 
