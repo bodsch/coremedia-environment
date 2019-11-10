@@ -15,24 +15,7 @@ resource "libvirt_network" "vm_network" {
   }
 }
 
-# see issue: https://github.com/bodsch/coremedia-environment/issues/1
-# https://medium.com/faun/creating-instances-with-multiple-network-interfaces-and-ip-route-issue-on-google-cloud-platform-6ac24977613e
-#
-# resource "libvirt_network" "int_network" {
-#   name      = "int_network"
-#   bridge    = "int-bridge-1"
-#   domain    = "int"
-#   mode      = "route"
-#   addresses = [ "192.168.2.0/24" ]
-#
-#   dhcp {
-#     enabled = false
-#   }
-#   dns {
-#     enabled = true
-#     local_only = true
-#   }
-# }
+
 
 # base system
 resource "libvirt_volume" "base_vol" {
@@ -46,12 +29,12 @@ output "image_bucket_name" {
 }
 
 # clone from base system and resize ...
-#resource "libvirt_volume" "cm-monitoring-qcow2" {
-#  name           = "cm-${var.server_monitoring["hostname"]}.qcow2"
-#  base_volume_id = "${libvirt_volume.base_vol.id}"
-#  pool           = "default"
-#  size           = "${lookup(var.server_database, "disk_size", "") == "" ? "0" : var.server_monitoring["disk_size"] }"
-#}
+resource "libvirt_volume" "cm-monitoring-qcow2" {
+  name           = "cm-${var.server_monitoring["hostname"]}.qcow2"
+  base_volume_id = "${libvirt_volume.base_vol.id}"
+  pool           = "default"
+  size           = "${lookup(var.server_database, "disk_size", "") == "" ? "0" : var.server_monitoring["disk_size"] }"
+}
 
 resource "libvirt_volume" "cm-database-qcow2" {
   name           = "cm-${var.server_database["hostname"]}.qcow2"
@@ -93,48 +76,48 @@ data "template_file" "user_data" {
   template = "${file("${path.module}/cloud_init.cfg")}"
 }
 
-## Create the machine
-#resource "libvirt_domain" "cm-monitoring" {
-#  name   = "${var.server_monitoring["hostname"]}"
-#  memory = "${var.server_monitoring["memory"]}"
-#  vcpu   = "${var.server_monitoring["vcpu"]}"
-#
-#  cloudinit = "${libvirt_cloudinit_disk.commoninit.id}"
-#
-#  network_interface {
-#    network_id = "${libvirt_network.vm_network.id}"
-#
-#    hostname  = "${var.server_monitoring["hostname"]}"
-#    addresses = [ "${var.server_monitoring["ip"]}" ]
-#    wait_for_lease = 1
-#  }
-#
-#  # IMPORTANT
-#  # Ubuntu can hang is a isa-serial is not present at boot time.
-#  # If you find your CPU 100% and never is available this is why
-#  console {
-#    type        = "pty"
-#    target_port = "0"
-#    target_type = "serial"
-#  }
-#
-#  console {
-#    type        = "pty"
-#    target_type = "virtio"
-#    target_port = "1"
-#  }
-#
-#  disk {
-#    volume_id = "${libvirt_volume.cm-monitoring-qcow2.id}"
-#  }
-#
-#  graphics {
-#    type = "spice"
-#    listen_type = "address"
-#    autoport = true
-#  }
-#}
-#
+# Create the machine
+resource "libvirt_domain" "cm-monitoring" {
+  name   = "${var.server_monitoring["hostname"]}"
+  memory = "${var.server_monitoring["memory"]}"
+  vcpu   = "${var.server_monitoring["vcpu"]}"
+
+  cloudinit = "${libvirt_cloudinit_disk.commoninit.id}"
+
+  network_interface {
+    network_id = "${libvirt_network.vm_network.id}"
+
+    hostname  = "${var.server_monitoring["hostname"]}"
+    addresses = [ "${var.server_monitoring["ip"]}" ]
+    wait_for_lease = 1
+  }
+
+  # IMPORTANT
+  # Ubuntu can hang is a isa-serial is not present at boot time.
+  # If you find your CPU 100% and never is available this is why
+  console {
+    type        = "pty"
+    target_port = "0"
+    target_type = "serial"
+  }
+
+  console {
+    type        = "pty"
+    target_type = "virtio"
+    target_port = "1"
+  }
+
+  disk {
+    volume_id = "${libvirt_volume.cm-monitoring-qcow2.id}"
+  }
+
+  graphics {
+    type = "spice"
+    listen_type = "address"
+    autoport = true
+  }
+}
+
 
 resource "libvirt_domain" "cm-database" {
   name   = "${var.server_database["hostname"]}"
@@ -151,9 +134,6 @@ resource "libvirt_domain" "cm-database" {
     wait_for_lease = 1
   }
 
-  # IMPORTANT
-  # Ubuntu can hang is a isa-serial is not present at boot time.
-  # If you find your CPU 100% and never is available this is why
   console {
     type        = "pty"
     target_port = "0"
@@ -230,14 +210,6 @@ resource "libvirt_domain" "cm-frontend" {
     addresses = [ "${var.server_frontend["ip"]}" ]
     wait_for_lease = 1
   }
-
-#  network_interface {
-#    network_id = "${libvirt_network.int_network.id}"
-#
-#    hostname  = "${var.server_frontend["hostname"]}"
-#    addresses = [ "192.168.2.30" ]
-#    wait_for_lease = 1
-#  }
 
   console {
     type        = "pty"

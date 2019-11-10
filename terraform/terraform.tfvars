@@ -6,33 +6,24 @@
 
 server_database = {
   "memory"    = 2048
-  "vcpu"      = 1
-  "disk_size" = ""
-  "ip"        = "192.168.124.10"
-  "hostname"  = "database"
 }
 
 server_backend = {
-
-  "memory"    = 3072
-  "vcpu"      = 1
+  "memory"    = 4096
   "disk_size" = "10737418240"
-  "ip"        = "192.168.124.20"
-  "hostname"  = "backend"
 }
 
 server_frontend = {
-  "memory"    = 3072
-  "vcpu"      = 1
+  "memory"    = 1024
   "disk_size" = "10737418240"
-  "ip"        = "192.168.124.30"
-  "hostname"  = "frontend"
 }
 
 server_delivery = {
-#   "memory"    = 512
-  "vcpu"      = 1
+  "memory"    = 2048
   "disk_size" = "10737418240"
-  "ip"        = "192.168.124.35"
-  "hostname"  = "delivery"
+}
+
+server_monitoring = {
+  "memory"    = 1024
+  "disk_size" = "10737418240"
 }
