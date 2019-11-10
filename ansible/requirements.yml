@@ -37,7 +37,7 @@
 
 - name: nginx
   src: https://github.com/geerlingguy/ansible-role-nginx.git
-  version: 2.6.1
+  version: 2.7.0
 
 - name: apache
   src: https://github.com/geerlingguy/ansible-role-apache.git
@@ -164,6 +164,11 @@
 
 - name: cae-preview
   src: https://gitlab.com/ansible-coremedia/cae-preview.git
+  scm: git
+  version: master
+
+- name: content-import
+  src: https://gitlab.com/ansible-coremedia/content-import.git
   scm: git
   version: master
 

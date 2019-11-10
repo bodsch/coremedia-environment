@@ -6,14 +6,13 @@ artefact_server: "http://192.168.124.1"
 application_version: 1904.2
 
 artefact_url: "{{ artefact_server }}/{{ application_version }}"
-tomcat_artefact_url: "{{ artefact_server }}/{{ application_version }}"
-coremedia_license_url: "{{ artefact_server }}/{{ application_version }}"
-solr_artefact_url: "{{ artefact_server }}/{{ application_version }}"
+tomcat_artefact_url: "{{ artefact_url }}"
+coremedia_license_url: "{{ artefact_url }}"
+solr_artefact_url: "{{ artefact_url }}"
 
 dnsmasq_upstream_server:
   - 192.168.124.1
   - 141.1.1.1
-
 
 coremedia_applications:
   content_management_server_tools:
@@ -89,3 +88,8 @@ coremedia_applications:
     artefact_url: "{{ artefact_server }}/{{ application_version }}"
     artefact_name: caefeeder-live.war
     artefact_checksum: a54f4971c0dd9cd9b98d2652efb9882b12b839f8
+  cae-live:
+    artefact_url: "{{ artefact_server }}/{{ application_version }}"
+    artefact_name: cae-live.war
+    artefact_checksum: f4c8880f7e145fd5611e908a5fa97c34e8991ffa
+
