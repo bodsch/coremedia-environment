@@ -90,18 +90,16 @@ digraph D {
       label   = "content server"
       bgcolor = antiquewhite
 
-      rls         [ label = "replication-live-server" color = "dodgerblue" style = filled ]
       mls         [ label = "master-live-server" color = "dodgerblue" style = filled ]
       feeder_live [ label = "caefeeder-live" ]
-      solr_fe     [ label = "solr" ]
+      solr_fe     [ label = "solr (master)" ]
 
 
       feeder_live     -> solr_fe
-      feeder_live     -> rls
+      feeder_live     -> mls
       feeder_live     -> mysql
-      mls             -> rls [ dir=both ]
+      // mls             -> rls [ dir=both ]
       mls             -> mysql
-      rls             -> mysql
 
       cms             -> mls [ penwidth = 2, color = "red" ]
     }
@@ -113,22 +111,30 @@ digraph D {
       bgcolor = antiquewhite
 
       httpd_fe      [ label = "httpd" ]
+      rls           [ label = "replication-live-server" color = "dodgerblue" style = filled ]
       cae1          [ label = "cae-live-1" ]
       cae2          [ label = "cae-live-2" ]
       cae3          [ label = "cae-live-3" ]
+
+      solr_fe_slave [ label = "solr (slave)" ]
 
       httpd_fe  -> cae1
       httpd_fe  -> cae2
       httpd_fe  -> cae3
 
+      solr_fe_slave -> solr_fe
+
       cae1      -> rls
-      cae1      -> solr_fe
+      cae1      -> solr_fe_slave
 
       cae2      -> rls
-      cae2      -> solr_fe
+      cae2      -> solr_fe_slave
 
       cae3      -> rls
-      cae3      -> solr_fe
+      cae3      -> solr_fe_slave
+
+      rls       -> mysql
+      rls       -> mls [ penwidth = 2, color = "red" ]
     }
   }
 }
