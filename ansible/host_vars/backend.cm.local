@@ -34,9 +34,6 @@ ulimit_config:
 coremedia_license_artifacts:
   - { service: 'cms', file: 'cms.zip' }
 
-#coremedia_licenses:
-#  - { src: 'files/cms.zip', dest: '{{license_directory}}/' }
-
 
 content_management_database:
   host: mysql.database.cm.local
@@ -44,6 +41,8 @@ content_management_database:
 caefeeder_preview_database:
   host: mysql.database.cm.local
 
+
+snakeoil_extract_to: /etc/coremedia
 
 
 content_management:

@@ -68,7 +68,8 @@
     - role: user-changes
     - role: studio
     - role: cae-preview
-    - role: nginx
+    - role: snakeoil
+    # - role: nginx
 
 # delivery services
 #  - replication-live-server
@@ -85,5 +86,6 @@
     - role: cae-live
       vars:
         - instances: 2
+    - role: snakeoil
     - role: nginx
     - role: overview

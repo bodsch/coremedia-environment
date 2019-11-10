@@ -50,7 +50,7 @@
 - name: coretto
   src: https://github.com/bodsch/ansible-coretto-java.git
   scm: git
-  version: 1.0.1
+  version: 1.1.0
 
 - name: grafana_selinux
   src: https://gitlab.com/bodsch/ansible-grafana-selinux.git
@@ -174,5 +174,10 @@
 
 - name: overview
   src: https://gitlab.com/ansible-coremedia/overview.git
+  scm: git
+  version: master
+
+- name: snakeoil
+  src: https://github.com/bodsch/ansible-snakeoil.git
   scm: git
   version: master

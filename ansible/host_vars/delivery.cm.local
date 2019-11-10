@@ -45,6 +45,9 @@ replication_live:
       server:
         ior_url: http://delivery.cm.local:42080/replication-live-server/ior
 
+
+snakeoil_extract_to: /etc/coremedia
+
 # ----------------------------------------------------------------------------
 
 nginx_error_log: "/var/log/nginx/error.log debug"
@@ -96,8 +99,8 @@ nginx_vhosts:
 
         try_files $uri $uri/index.html $uri.html =404;
       }
-      ssl_certificate     /etc/coremedia/ssl/cm.local.pem;
-      ssl_certificate_key /etc/coremedia/ssl/cm.local.key;
+      ssl_certificate     /etc/coremedia/snakeoil/cm.local.pem;
+      ssl_certificate_key /etc/coremedia/snakeoil/cm.local.key;
       ssl_protocols       TLSv1.1 TLSv1.2;
       ssl_ciphers         HIGH:!aNULL:!MD5;
 
