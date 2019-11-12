@@ -1,36 +1,20 @@
 # {{ ansible_managed }}
-{% set database_hostname = groups['database'] | first -%}
-{% set backend_hostname  = groups['backend']  | first -%}
-{% set frontend_hostname = groups['frontend'] | first -%}
-{% set delivery_hostname = groups['delivery'] | first -%}
-
-{% set database_ip = lookup('pipe', 'dig +short ' + database_hostname + ' @192.168.124.1') -%}
-{% set backend_ip  = lookup('pipe', 'dig +short ' + backend_hostname  + ' @192.168.124.1') -%}
-{% set frontend_ip = lookup('pipe', 'dig +short ' + frontend_hostname + ' @192.168.124.1') -%}
-{% set delivery_ip = lookup('pipe', 'dig +short ' + delivery_hostname + ' @192.168.124.1') -%}
 
 {{ ansible_default_ipv4.address }} {{ ansible_hostname }}.{{ ansible_domain }} {{ ansible_hostname }}
 
-# database
-{{ database_ip }} mysql.{{ database_hostname }}
-{{ database_ip }} mongo.{{ database_hostname }}
+# Network nodes as generated through Ansible.
+{% for host in play_hosts %}
+{% if 'ansible_eth0' in hostvars[host] %}
+{{ hostvars[host]['ansible_eth0']['ipv4']['address'] }}  {{ host }}
+{% endif %}
+{% endfor %}
 
-# backend urls
-{{ backend_ip }} cms.{{ backend_hostname }}
-{{ backend_ip }} wfs.{{ backend_hostname }}
-{{ backend_ip }} preview.{{ backend_hostname }}
-{{ backend_ip }} sitemanager.{{ backend_hostname }}
-{{ backend_ip }} studio.{{ backend_hostname }}
-{{ backend_ip }} feeder-preview.{{ backend_hostname }}
-
-# frontend urls
-{{ frontend_ip }} mls.{{ frontend_hostname }}
-{{ frontend_ip }} rls.{{ frontend_hostname }}
-{{ frontend_ip }} feeder-live.{{ frontend_hostname }}
-
-# delivery urls
-{{ delivery_ip }} corporate.{{ delivery_hostname }}
-{{ delivery_ip }} overview.{{ delivery_hostname }}
+{% for h in custom_hosts -%}
+{% if h.description -%}
+# {{ h.description }}
+{% endif -%}
+{{ h.ip }}  {{ h.names | sort | join(' ' ) }}
+{% endfor -%}
 
 
 127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
