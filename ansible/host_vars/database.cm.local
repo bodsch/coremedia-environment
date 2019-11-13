@@ -74,3 +74,4 @@ mariadb_users:
 # MongoDB
 mongodb_net_bindip: '0.0.0.0'
 mongodb_storage_dbpath: '/var/lib/mongo'
+mongodb_net_maxconns: 1024

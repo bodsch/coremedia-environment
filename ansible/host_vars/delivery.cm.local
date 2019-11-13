@@ -26,24 +26,24 @@ replication_live_database:
 
 cae_live:
   repository:
-    url: http://delivery.cm.local:42080/replication-live-server/ior
+    url: http://rls.cm.local:42080/replication-live-server/ior
   elastic:
     solr:
-      url: http://frontend.cm.local:40080/solr
+      url: http://solr-master.cm.local:40080/solr
   solr:
-    url: http://frontend.cm.local:40080/solr
+    url: http://solr-master.cm.local:40080/solr
   mongodb:
-    client_uri: mongodb://mongo.database.cm.local:27017/
+    client_uri: mongodb://mongodb.cm.local:27017/
 
 
 replication_live:
   replicator:
     publication:
-      ior_url: http://mls.frontend.cm.local:40280/master-live-server/ior
+      ior_url: http://mls.cm.local:40280/master-live-server/ior
   cap:
     client:
       server:
-        ior_url: http://delivery.cm.local:42080/replication-live-server/ior
+        ior_url: http://rls.cm.local:42080/replication-live-server/ior
 
 
 snakeoil_extract_to: /etc/coremedia

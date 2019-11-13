@@ -10,6 +10,40 @@ tomcat_artefact_url: "{{ artefact_url }}"
 coremedia_license_url: "{{ artefact_url }}"
 solr_artefact_url: "{{ artefact_url }}"
 
+custom_hosts:
+  - ip: 192.168.124.10
+    description: database server
+    names:
+      - mysql.cm.local
+      - mongo.cm.local
+      - mongodb.cm.local
+  - ip: 192.168.124.20
+    description: backend server
+    names:
+      - backend.cm.local
+      - cms.cm.local
+      - wfs.cm.local
+      - studio.cm.local
+      - preview.cm.local
+      - solr-be.cm.local
+      - feeder-preview.cm.local
+  - ip: 192.168.124.30
+    description: frontend server
+    names:
+      - mls.cm.local
+      - solr-fe.cm.local
+      - solr-master.cm.local
+      - feeder-live.cm.local
+  - ip: 192.168.124.35
+    description: delivery server
+    names:
+      - rls.cm.local
+      - solr-slave.cm.local
+      - cae1.cm.local
+      - cae2.cm.local
+      - overview.cm.local
+      - corporate.cm.local
+
 dnsmasq_upstream_server:
   - 192.168.124.1
   - 141.1.1.1

@@ -81,6 +81,7 @@
   become: yes
   remote_user: sysadm
   roles:
+    - role: solr
     - role: replication-live-server_tools
     - role: replication-live-server
     - role: cae-live
