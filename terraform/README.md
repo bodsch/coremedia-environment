@@ -29,6 +29,7 @@ Running against daemon: 5.5.0
 $ cd /var/lib/libvirt/images
 $ sudo curl -sL https://cloud.centos.org/centos/7/images/CentOS-7-x86_64-GenericCloud-1907.qcow2.xz -o CentOS-7-x86_64-GenericCloud-1907.qcow2.xz
 $ sudo xz -d CentOS-7-x86_64-GenericCloud-1907.qcow2.xz
+$ sudo curl -s https://cloud-images.ubuntu.com/eoan/current/eoan-server-cloudimg-amd64.img -o eoan-server-cloudimg-amd64.qcow2
 ```
 
 # configure KVM / QEMU

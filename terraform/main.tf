@@ -16,65 +16,84 @@ resource "libvirt_network" "vm_network" {
 }
 
 
-
-# base system
-resource "libvirt_volume" "base_vol" {
+# centos base system
+resource "libvirt_volume" "centos_image" {
   name  = "lvm-centos"
   pool   = "default"
   source = "/var/lib/libvirt/images/CentOS-7-x86_64-GenericCloud-1907.qcow2"
 }
 
-output "image_bucket_name" {
-  value = "${lookup(var.server_database, "disk_size", "")}"
+# ubuntu base system
+resource "libvirt_volume" "ubuntu_image" {
+  name  = "ubuntu-image"
+  pool   = "default"
+  source = "/var/lib/libvirt/images/eoan-server-cloudimg-amd64.img"
 }
+
+data "template_file" "user_data_centos" {
+  template = "${file("${path.module}/cloud_init_centos.cfg")}"
+}
+
+data "template_file" "user_data_debian" {
+  template = "${file("${path.module}/cloud_init_debian.cfg")}"
+}
+
+# Use CloudInit to add our ssh-key to the instance
+resource "libvirt_cloudinit_disk" "commoninit_centos" {
+  name       = "commoninit_centos.iso"
+  pool       = "default"
+  user_data  = "${data.template_file.user_data_centos.rendered}"
+}
+
+resource "libvirt_cloudinit_disk" "commoninit_debian" {
+  name       = "commoninit_debian.iso"
+  pool       = "default"
+  user_data  = "${data.template_file.user_data_debian.rendered}"
+}
+
+
+#output "image_bucket_name" {
+#  value = "${lookup(var.server_database, "disk_size", "")}"
+#}
 
 # clone from base system and resize ...
 resource "libvirt_volume" "cm-monitoring-qcow2" {
   name           = "cm-${var.server_monitoring["hostname"]}.qcow2"
-  base_volume_id = "${libvirt_volume.base_vol.id}"
+  base_volume_id = "${libvirt_volume.ubuntu_image.id}"
   pool           = "default"
   size           = "${lookup(var.server_database, "disk_size", "") == "" ? "0" : var.server_monitoring["disk_size"] }"
 }
 
 resource "libvirt_volume" "cm-database-qcow2" {
   name           = "cm-${var.server_database["hostname"]}.qcow2"
-  base_volume_id = "${libvirt_volume.base_vol.id}"
+  base_volume_id = "${libvirt_volume.centos_image.id}"
   pool           = "default"
   size           = "${lookup(var.server_database, "disk_size", "") == "" ? "0" : var.server_database["disk_size"] }"
 }
 
 resource "libvirt_volume" "cm-backend-qcow2" {
   name           = "cm-${var.server_backend["hostname"]}.qcow2"
-  base_volume_id = "${libvirt_volume.base_vol.id}"
+  base_volume_id = "${libvirt_volume.centos_image.id}"
   pool           = "default"
   size           = "${var.server_backend["disk_size"]}"
 }
 
 resource "libvirt_volume" "cm-frontend-qcow2" {
   name           = "cm-${var.server_frontend["hostname"]}.qcow2"
-  base_volume_id = "${libvirt_volume.base_vol.id}"
+  base_volume_id = "${libvirt_volume.centos_image.id}"
   pool           = "default"
   size           = "${var.server_frontend["disk_size"]}"
 }
 
 resource "libvirt_volume" "cm-delivery-qcow2" {
   name           = "cm-${var.server_delivery["hostname"]}.qcow2"
-  base_volume_id = "${libvirt_volume.base_vol.id}"
+  base_volume_id = "${libvirt_volume.centos_image.id}"
   pool           = "default"
   size           = "${var.server_delivery["disk_size"]}"
 }
 
 
-# Use CloudInit to add our ssh-key to the instance
-resource "libvirt_cloudinit_disk" "commoninit" {
-  name       = "commoninit.iso"
-  pool       = "default"
-  user_data  = "${data.template_file.user_data.rendered}"
-}
 
-data "template_file" "user_data" {
-  template = "${file("${path.module}/cloud_init.cfg")}"
-}
 
 # Create the machine
 resource "libvirt_domain" "cm-monitoring" {
@@ -82,7 +101,7 @@ resource "libvirt_domain" "cm-monitoring" {
   memory = "${var.server_monitoring["memory"]}"
   vcpu   = "${var.server_monitoring["vcpu"]}"
 
-  cloudinit = "${libvirt_cloudinit_disk.commoninit.id}"
+  cloudinit = "${libvirt_cloudinit_disk.commoninit_debian.id}"
 
   network_interface {
     network_id = "${libvirt_network.vm_network.id}"
@@ -124,7 +143,7 @@ resource "libvirt_domain" "cm-database" {
   memory = "${var.server_database["memory"]}"
   vcpu   = "${var.server_database["vcpu"]}"
 
-  cloudinit = "${libvirt_cloudinit_disk.commoninit.id}"
+  cloudinit = "${libvirt_cloudinit_disk.commoninit_centos.id}"
 
   network_interface {
     network_id = "${libvirt_network.vm_network.id}"
@@ -162,7 +181,7 @@ resource "libvirt_domain" "cm-backend" {
   memory = "${var.server_backend["memory"]}"
   vcpu   = "${var.server_backend["vcpu"]}"
 
-  cloudinit = "${libvirt_cloudinit_disk.commoninit.id}"
+  cloudinit = "${libvirt_cloudinit_disk.commoninit_centos.id}"
 
   network_interface {
     network_id = "${libvirt_network.vm_network.id}"
@@ -200,7 +219,7 @@ resource "libvirt_domain" "cm-frontend" {
   memory = "${var.server_frontend["memory"]}"
   vcpu   = "${var.server_frontend["vcpu"]}"
 
-  cloudinit = "${libvirt_cloudinit_disk.commoninit.id}"
+  cloudinit = "${libvirt_cloudinit_disk.commoninit_centos.id}"
 
   network_interface {
     network_id = "${libvirt_network.vm_network.id}"
@@ -239,7 +258,7 @@ resource "libvirt_domain" "cm-delivery" {
   memory = "${var.server_delivery["memory"]}"
   vcpu   = "${var.server_delivery["vcpu"]}"
 
-  cloudinit = "${libvirt_cloudinit_disk.commoninit.id}"
+  cloudinit = "${libvirt_cloudinit_disk.commoninit_centos.id}"
 
   network_interface {
     network_id = "${libvirt_network.vm_network.id}"
