@@ -1,4 +1,8 @@
 
+- name: resolv
+  src: https://github.com/ahuffman/ansible-resolv.git
+  version: 1.3.1
+
 - name: dnsmasq
   src: https://github.com/bertvv/ansible-dnsmasq.git
   version: v2.1.0
@@ -105,12 +109,12 @@
 - name: solr
   src: https://gitlab.com/ansible-coremedia/solr.git
   scm: git
-  version: master
+  version: 1.0.0
 
 - name: content-management-server
   src: https://gitlab.com/ansible-coremedia/content-management-server.git
   scm: git
-  version: master
+  version: 1.0.0
 
 - name: master-live-server
   src: https://gitlab.com/ansible-coremedia/master-live-server.git

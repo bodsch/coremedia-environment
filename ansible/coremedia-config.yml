@@ -44,9 +44,15 @@ custom_hosts:
       - overview.cm.local
       - corporate.cm.local
 
-dnsmasq_upstream_server:
+dnsmasq_interface: lo
+dnsmasq_upstream_servers:
   - 192.168.124.1
   - 141.1.1.1
+
+resolv_nameservers:
+  - 127.0.0.1
+  - 141.1.1.1
+resolv_domain: cm.local
 
 coremedia_applications:
   content_management_server_tools:
