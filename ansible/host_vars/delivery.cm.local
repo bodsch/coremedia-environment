@@ -7,6 +7,9 @@ firewalld_ports_open:
     port: 80
   - proto: tcp
     port: 443
+  # solr
+  - proto: tcp
+    port: 40080
   # cae-live-1
   - proto: tcp
     port: 42180
@@ -21,32 +24,32 @@ coremedia_license_artifacts:
 
 # ----------------------------------------------------------------------------
 
-replication_live_database:
-  host: mysql.database.cm.local
+solr:
+  log_level: DEBUG
+  slave: true
+  master:
+    url: http://solr-master.cm.local:40080/solr/
 
-cae_live:
-  repository:
-    url: http://rls.cm.local:42080/replication-live-server/ior
-  elastic:
-    solr:
-      url: http://solr-master.cm.local:40080/solr
-  solr:
-    url: http://solr-master.cm.local:40080/solr
-  mongodb:
-    client_uri: mongodb://mongodb.cm.local:27017/
-
-
-replication_live:
-  replicator:
-    publication:
-      ior_url: http://mls.cm.local:40280/master-live-server/ior
-  cap:
-    client:
-      server:
-        ior_url: http://rls.cm.local:42080/replication-live-server/ior
+#cae_live:
+#  repository:
+#    url: http://rls.cm.local:42080/replication-live-server/ior
+#  elastic:
+#    solr:
+#      url: http://solr-master.cm.local:40080/solr
+#  solr:
+#    url: http://solr-master.cm.local:40080/solr
+#  mongodb:
+#    client_uri: mongodb://mongodb.cm.local:27017/
 
 
-snakeoil_extract_to: /etc/coremedia
+# replication_live:
+#   replicator:
+#     publication:
+#       ior_url: http://mls.cm.local:40280/master-live-server/ior
+#   cap:
+#     client:
+#       server:
+#         ior_url: http://rls.cm.local:42080/replication-live-server/ior
 
 # ----------------------------------------------------------------------------
 
@@ -70,6 +73,9 @@ nginx_upstreams:
     servers:
       - delivery.cm.local:42180 max_fails=3 fail_timeout=30s
       - delivery.cm.local:42280 max_fails=3 fail_timeout=30s
+  - name: workflow-server
+    servers:
+      - rls.cm.local:42080 max_fails=3 fail_timeout=30s
 
 nginx_vhosts:
 
@@ -99,8 +105,8 @@ nginx_vhosts:
 
         try_files $uri $uri/index.html $uri.html =404;
       }
-      ssl_certificate     /etc/coremedia/snakeoil/cm.local.pem;
-      ssl_certificate_key /etc/coremedia/snakeoil/cm.local.key;
+      ssl_certificate     /etc/coremedia/snakeoil/cm.local/cm.local.pem;
+      ssl_certificate_key /etc/coremedia/snakeoil/cm.local/cm.local.pem;
       ssl_protocols       TLSv1.1 TLSv1.2;
       ssl_ciphers         HIGH:!aNULL:!MD5;
 

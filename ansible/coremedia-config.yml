@@ -54,6 +54,17 @@ resolv_nameservers:
   - 141.1.1.1
 resolv_domain: cm.local
 
+snakeoil_extract_to: /etc/coremedia/snakeoil
+snakeoil_domain: cm.local
+snakeoil_alt_names:
+  - dns:
+      - overview.cm.local
+      - cae1.cm.local
+      - cae3.cm.local
+  - ip:
+      - 192.168.124.10
+
+
 coremedia_applications:
   content_management_server_tools:
     artefact_url: "{{ artefact_server }}/{{ application_version }}"

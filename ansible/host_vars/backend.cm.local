@@ -35,35 +35,30 @@ coremedia_license_artifacts:
   - { service: 'cms', file: 'cms.zip' }
 
 
-content_management_database:
-  host: mysql.cm.local
 
 caefeeder_preview_database:
   host: mysql.cm.local
 
 
-snakeoil_extract_to: /etc/coremedia
+# content_management:
+#   solr:
+#     url: http://solr-be.cm.local:40080/solr
+#     collection_content: studio
+#   publisher:
+#     target:
+#       ior_url: http://mls.cm.local:40280/master-live-server/ior
+#   cap:
+#     client:
+#       server:
+#         ior_url: http://cms.cm.local:40180/content-management-server/ior
 
-
-content_management:
-  solr:
-    url: http://solr-be.cm.local:40080/solr
-    collection_content: studio
-  publisher:
-    target:
-      ior_url: http://mls.cm.local:40280/master-live-server/ior
-  cap:
-    client:
-      server:
-        ior_url: http://cms.cm.local:40180/content-management-server/ior
-
-workflow_server:
-  cap:
-    client:
-      server:
-        ior_url: http://cms.cm.local:40180/content-management-server/ior
-  mongodb:
-    client_uri: mongodb://mongodb.cm.local:27017/
+# workflow_server:
+#   cap:
+#     client:
+#       server:
+#         ior_url: http://cms.cm.local:40180/content-management-server/ior
+#   mongodb:
+#     client_uri: mongodb://mongodb.cm.local:27017/
 
 content_feeder:
   repository:

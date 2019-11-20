@@ -3,37 +3,39 @@
 firewalld_ports_open:
   - proto: tcp
     port: 22
+  # mariadb
   - proto: tcp
     port: 3306
+  # mongodb
   - proto: tcp
     port: 27017
 
 # MariaDB
 
-mariadb_bind_address: '0.0.0.0'
-mariadb_root_password: 'coremedia'
+mariadb_bind_address: "{{ ansible_default_ipv4.address }}"
+mariadb_root_password: coremedia
 
 mariadb_databases:
   - name: monitoring
     collation: utf8mb4_bin
     encoding: utf8mb4
-
+  # content-management-server
   - name: cm_master
     collation: utf8mb4_bin
     encoding: utf8mb4
-
+  # master-live-server
   - name: cm_management
     collation: utf8mb4_bin
     encoding: utf8mb4
-
+  # replication-live-server
   - name: cm_replication
     collation: utf8mb4_bin
     encoding: utf8mb4
-
+  # caefeeder-live
   - name: cm_caefeeder
     collation: utf8mb4_bin
     encoding: utf8mb4
-
+  # caefeeder-preview
   - name: cm_mcaefeeder
     collation: utf8mb4_bin
     encoding: utf8mb4
@@ -72,6 +74,6 @@ mariadb_users:
 
 
 # MongoDB
-mongodb_net_bindip: '0.0.0.0'
-mongodb_storage_dbpath: '/var/lib/mongo'
+mongodb_net_bindip: "{{ ansible_default_ipv4.address }}"
+mongodb_storage_dbpath: /var/lib/mongo
 mongodb_net_maxconns: 1024
