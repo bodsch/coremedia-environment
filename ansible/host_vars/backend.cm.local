@@ -34,78 +34,22 @@ ulimit_config:
 coremedia_license_artifacts:
   - { service: 'cms', file: 'cms.zip' }
 
+# ----------------------------------------------------------------------------
 
+content_management:
+  cap:
+    client:
+      server:
+        ior_url: http://cms.cm.local:40180/content-management-server/ior
+  publisher:
+    target:
+      ior_url: http://mls.cm.local:40280/master-live-server/ior
 
-caefeeder_preview_database:
-  host: mysql.cm.local
-
-
-# content_management:
-#   solr:
-#     url: http://solr-be.cm.local:40080/solr
-#     collection_content: studio
-#   publisher:
-#     target:
-#       ior_url: http://mls.cm.local:40280/master-live-server/ior
-#   cap:
-#     client:
-#       server:
-#         ior_url: http://cms.cm.local:40180/content-management-server/ior
-
-# workflow_server:
-#   cap:
-#     client:
-#       server:
-#         ior_url: http://cms.cm.local:40180/content-management-server/ior
-#   mongodb:
-#     client_uri: mongodb://mongodb.cm.local:27017/
-
-content_feeder:
-  repository:
-    url: http://cms.cm.local:40180/content-management-server/ior
-  solr:
-    url: http://solr-be.cm.local:40080/solr
-
-caefeeder_preview:
-  solr:
-    url: http://solr-be.cm.local:40080/solr
-
-elastic_worker:
-  repository:
-    url: http://cms.cm.local:40180/content-management-server/ior
-  elastic:
-    solr:
-      url: http://solr-be.cm.local:40080/solr
-  mongodb:
-    client_uri: mongodb://mongodb.cm.local:27017/
-
-user_changes:
-  repository:
-    url: http://cms.cm.local:40180/content-management-server/ior
-  mongodb:
-    client_uri: mongodb://mongodb.cm.local:27017/
-
-studio:
-  elastic:
-    solr:
-      url: http://solr-be.cm.local:40080/solr
-  solr:
-    url: http://solr-be.cm.local:40080/solr
-  repository:
-    url: http://cms.cm.local:40180/content-management-server/ior
-  mongodb:
-    client_uri: mongodb://mongodb.cm.local:27017/
-
-cae_preview:
-  repository:
-    url: http://cms.cm.local:40180/content-management-server/ior
-  elastic:
-    solr:
-      url: http://solr-be.cm.local:40080/solr
-  solr:
-    url: http://solr-be.cm.local:40080/solr
-  mongodb:
-    client_uri: mongodb://mongodb.cm.local:27017/
+workflow_server:
+  cap:
+    client:
+      server:
+        ior_url: http://cms.cm.local:40180/content-management-server/ior
 
 # ----------------------------------------------------------------------------
 
@@ -135,8 +79,8 @@ nginx_upstreams:
 nginx_vhosts:
   # https://winginx.com/en/htaccess
   - listen: "80"
-    server_name: 'studio.{{ ansible_fqdn }}'
-    filename: '20-studio.{{ ansible_fqdn }}.conf'
+    server_name: 'studio.{{ ansible_domain }}'
+    filename: '20-studio.{{ ansible_domain }}.conf'
     root: /var/www/html
     index: index.html
     access_log: '/var/log/nginx/studio_access.log'
@@ -157,8 +101,8 @@ nginx_vhosts:
       #   rewrite ^/$ /studio/$1 redirect;
       # }
   - listen: 80
-    server_name: sitemanager.{{ ansible_fqdn }}
-    filename: 20-sitemanager.{{ ansible_fqdn }}.conf
+    server_name: sitemanager.{{ ansible_domain }}
+    filename: 20-sitemanager.{{ ansible_domain }}.conf
     root: /var/www/html
     index: index.html
     access_log: /var/log/nginx/sitemanager_access.log

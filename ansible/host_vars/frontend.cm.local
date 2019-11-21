@@ -6,7 +6,11 @@ firewalld_ports_open:
   # solr
   - proto: tcp
     port: 40080
-
+  # master-live-server
+  - proto: tcp
+    port: 40280
+  - proto: tcp
+    port: 40283
 
 ulimit_config:
   - domain: solr

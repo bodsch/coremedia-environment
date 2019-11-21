@@ -61,7 +61,6 @@
     - role: solr
     - role: content-management-server
     - role: workflow-server
-    - role: content-import
     - role: caefeeder-preview
     - role: content-feeder
     - role: elastic-worker
@@ -69,7 +68,14 @@
     - role: studio
     - role: cae-preview
     - role: snakeoil
-    # - role: nginx
+    - role: nginx
+
+- hosts: backend
+  gather_facts: true
+  become: yes
+  remote_user: sysadm
+  roles:
+    - role: content-import
 
 # delivery services
 #  - replication-live-server
