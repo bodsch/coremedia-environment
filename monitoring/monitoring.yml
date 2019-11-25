@@ -1,0 +1,19 @@
+---
+
+- hosts: monitoring
+  # gather_facts: true
+  become: yes
+  remote_user: sysadm
+  environment:
+    NETRC: ''
+  roles:
+    - role: common
+    - role: beanstalkd
+    - role: service-discovery
+#     - role: firewalld
+#     - role: redis
+#     - role: trickster
+#     - role: prometheus
+#     - role: grafana
+#     - role: grafana_selinux
+#     - role: nginx

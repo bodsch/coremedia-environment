@@ -1,0 +1,92 @@
+---
+
+- name: Include OS-specific variables.
+  include_vars:
+    file: "{{ item }}"
+  with_first_found:
+    - "{{ ansible_distribution | lower }}.{{ ansible_lsb.codename | lower }}.yml"
+    - "{{ ansible_distribution | lower }}.{{ ansible_lsb.major_release }}.yml"
+    - "{{ ansible_distribution | lower }}.yml"
+    - "{{ ansible_os_family | lower }}.yml"
+    - "default.yml"
+
+- name: set timezone to UTC
+  timezone:
+    name: UTC
+
+- name: Make sure Ansible local facts directory exists
+  file:
+    dest: '/etc/ansible/facts.d'
+    state: 'directory'
+    owner: 'root'
+    group: 'root'
+    mode: '0755'
+
+# - name: update redhat based systems
+#   block:
+#     - name: Upgrade all installed packages for RedHat and CentOS
+#       yum:
+#         name: "*"
+#         state: latest
+# #        skip_broken: yes
+#       async: 7200
+#       poll: 0
+#       register: yum_sleeper
+#
+#     - name: 'YUM - check on async task'
+#       async_status:
+#         jid: "{{ yum_sleeper.ansible_job_id }}"
+#       register: job_result
+#       until: job_result.finished
+#       retries: 150
+#       delay: 30
+#
+#   when: ansible_os_family | lower == "redhat"
+#
+#
+# - name: update debian based systems
+#   block:
+#     - name: Upgrade all installed packages for Debian and Ubuntu
+#       apt:
+#         name: "*"
+#         state: latest
+#         update_cache: yes
+#         force_apt_get: yes
+#       async: 7200
+#       poll: 0
+#       register: apt_sleeper
+#
+#     - name: 'APT - check on async task'
+#       async_status:
+#         jid: "{{ apt_sleeper.ansible_job_id }}"
+#       register: job_result
+#       until: job_result.finished
+#       retries: 150
+#       delay: 30
+#
+#   when: ansible_os_family | lower == "debian"
+
+- name: ensure needed packages are installed
+  package:
+    name: "{{ item }}"
+    state: present
+  loop:
+    "{{ additional_packages }}"
+
+- name: add subdomains to /etc/hosts
+  template:
+    src: templates/hosts.j2
+    dest: /etc/hosts
+
+- name: change bash_profile
+  template:
+    src: bash_profile.j2
+    dest: /root/.bash_profile
+
+- name: ensure unneeded services are stoped and disabled
+  service:
+    name: "{{ item }}"
+    state: stopped
+    enabled: false
+  loop:
+    "{{ unneeded_services }}"

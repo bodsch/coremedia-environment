@@ -70,12 +70,12 @@
     - role: snakeoil
     - role: nginx
 
-- hosts: backend
-  gather_facts: true
-  become: yes
-  remote_user: sysadm
-  roles:
-    - role: content-import
+# - hosts: backend
+#   gather_facts: true
+#   become: yes
+#   remote_user: sysadm
+#   roles:
+#     - role: content-import
 
 # delivery services
 #  - replication-live-server

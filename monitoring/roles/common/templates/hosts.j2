@@ -1,0 +1,22 @@
+# {{ ansible_managed }}
+
+{{ ansible_default_ipv4.address }} {{ ansible_hostname }}.{{ ansible_domain }} {{ ansible_hostname }}
+
+# Network nodes as generated through Ansible.
+{% for host in play_hosts %}
+{% if 'ansible_eth0' in hostvars[host] %}
+{{ hostvars[host]['ansible_eth0']['ipv4']['address'] }}  {{ host }}
+{% endif %}
+{% endfor %}
+
+{% if custom_hosts is defined -%}
+{% for h in custom_hosts -%}
+{% if h.description -%}
+# {{ h.description }}
+{% endif -%}
+{{ h.ip }}  {{ h.names | sort | join(' ' ) }}
+{% endfor -%}
+{% endif %}
+
+127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
