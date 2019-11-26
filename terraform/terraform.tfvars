@@ -24,6 +24,6 @@ server_delivery = {
 }
 
 server_monitoring = {
-  "memory"    = 1024
+  "memory"    = 2048
   "disk_size" = "10737418240"
 }

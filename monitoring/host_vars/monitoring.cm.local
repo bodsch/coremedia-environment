@@ -6,6 +6,26 @@ firewalld_ports_open:
   - proto: tcp
     port: 80
 
+# -------------------------------------------------------------------------------------------------
+# MariaDB
+
+mariadb_bind_address: 127.0.0.1
+mariadb_root_password: monitoring
+
+mariadb_databases:
+  - name: database
+    collation: utf8mb4_bin
+    encoding: utf8mb4
+
+mariadb_users:
+
+  - name: database
+    host: '%'
+    password: database
+    priv: "database.*:ALL"
+
+# -------------------------------------------------------------------------------------------------
+
 # trickster
 #
 trickster_proxy_server_listen_address: '127.0.0.1'
