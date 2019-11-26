@@ -7,9 +7,11 @@
   environment:
     NETRC: ''
   roles:
-    - role: common
-    - role: beanstalkd
-    - role: service-discovery
+    #- role: common
+    #- role: beanstalkd
+    #- role: mariadb
+    - role: rest-service
+    #- role: service-discovery
 #     - role: firewalld
 #     - role: redis
 #     - role: trickster

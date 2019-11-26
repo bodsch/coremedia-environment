@@ -1,61 +1,66 @@
 
-- name: resolv
-  src: https://github.com/ahuffman/ansible-resolv.git
-  version: 1.3.1
-
-- name: dnsmasq
-  src: https://github.com/bertvv/ansible-dnsmasq.git
-  version: v2.1.0
+# - name: resolv
+#   src: https://github.com/ahuffman/ansible-resolv.git
+#   version: 1.3.1
+#
+# - name: dnsmasq
+#   src: https://github.com/bertvv/ansible-dnsmasq.git
+#   version: v2.1.0
 
 - name: mariadb
-  src: https://github.com/bertvv/ansible-role-mariadb.git
-  version: v3.0.0
+  src: https://github.com/bodsch/ansible-role-mariadb.git
+  version: feature/support-debian
 
-- name: sshd
-  src: https://github.com/willshersystems/ansible-sshd.git
-  version: v0.8.0
-
-- name: firewalld
-  src: https://github.com/oasis-roles/firewalld.git
-  version: master
-
-- name: grafana
-  src: https://github.com/cloudalchemy/ansible-grafana.git
-  version: 0.14.2
-
-- name: node_exporter
-  src: https://github.com/cloudalchemy/ansible-node-exporter.git
-  version: 0.14.0
-
-- name: prometheus
-  src: https://github.com/cloudalchemy/ansible-prometheus.git
-  version: 2.11.0
-
-- name: redis
-  src: https://github.com/geerlingguy/ansible-role-redis.git
-  version: 1.6.0
-
-- name: nginx
-  src: https://github.com/geerlingguy/ansible-role-nginx.git
-  version: 2.7.0
-
-- name: grafana_selinux
-  src: https://gitlab.com/bodsch/ansible-grafana-selinux.git
-  scm: git
-  version: 1.0.0
-
-- name: trickster
-  src: https://gitlab.com/bodsch/ansible-trickster.git
-  scm: git
-  version: 1.0.1
-
-- name: snakeoil
-  src: https://github.com/bodsch/ansible-snakeoil.git
-  scm: git
-  version: master
+# - name: sshd
+#   src: https://github.com/willshersystems/ansible-sshd.git
+#   version: v0.8.0
+#
+# - name: firewalld
+#   src: https://github.com/oasis-roles/firewalld.git
+#   version: master
+#
+# - name: grafana
+#   src: https://github.com/cloudalchemy/ansible-grafana.git
+#   version: 0.14.2
+#
+# - name: node_exporter
+#   src: https://github.com/cloudalchemy/ansible-node-exporter.git
+#   version: 0.14.0
+#
+# - name: prometheus
+#   src: https://github.com/cloudalchemy/ansible-prometheus.git
+#   version: 2.11.0
+#
+# - name: redis
+#   src: https://github.com/geerlingguy/ansible-role-redis.git
+#   version: 1.6.0
+#
+# - name: nginx
+#   src: https://github.com/geerlingguy/ansible-role-nginx.git
+#   version: 2.7.0
+#
+# - name: grafana_selinux
+#   src: https://gitlab.com/bodsch/ansible-grafana-selinux.git
+#   scm: git
+#   version: 1.0.0
+#
+# - name: trickster
+#   src: https://gitlab.com/bodsch/ansible-trickster.git
+#   scm: git
+#   version: 1.0.1
+#
+# - name: snakeoil
+#   src: https://github.com/bodsch/ansible-snakeoil.git
+#   scm: git
+#   version: master
 
 - name: beanstalkd
   src: https://gitlab.com/coremedia-monitoring/ansible-beanstalkd.git
+  scm: git
+  version: master
+
+- name: rest-service
+  src: https://gitlab.com/coremedia-monitoring/ansible-rest-service.git
   scm: git
   version: master
 
