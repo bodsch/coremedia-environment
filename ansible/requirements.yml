@@ -23,22 +23,6 @@
   src: https://github.com/oasis-roles/firewalld.git
   version: master
 
-- name: grafana
-  src: https://github.com/cloudalchemy/ansible-grafana.git
-  version: 0.14.2
-
-- name: node_exporter
-  src: https://github.com/cloudalchemy/ansible-node-exporter.git
-  version: 0.14.0
-
-- name: prometheus
-  src: https://github.com/cloudalchemy/ansible-prometheus.git
-  version: 2.11.0
-
-- name: redis
-  src: https://github.com/geerlingguy/ansible-role-redis.git
-  version: 1.6.0
-
 - name: nginx
   src: https://github.com/geerlingguy/ansible-role-nginx.git
   version: 2.7.0
@@ -55,16 +39,6 @@
   src: https://github.com/bodsch/ansible-coretto-java.git
   scm: git
   version: 1.1.0
-
-- name: grafana_selinux
-  src: https://gitlab.com/bodsch/ansible-grafana-selinux.git
-  scm: git
-  version: 1.0.0
-
-- name: trickster
-  src: https://gitlab.com/bodsch/ansible-trickster.git
-  scm: git
-  version: 1.0.1
 
 - name: tomcat
   src: https://gitlab.com/ansible-coremedia/tomcat.git
@@ -185,3 +159,14 @@
   src: https://github.com/bodsch/ansible-snakeoil.git
   scm: git
   version: master
+
+- name: jolokia
+  src: https://gitlab.com/bodsch/ansible-jolokia.git
+  scm: git
+  version: master
+
+- name: portscanner
+  src: https://gitlab.com/coremedia-monitoring/ansible-portscanner.git
+  scm: git
+  version: master
+
