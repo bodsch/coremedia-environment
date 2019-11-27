@@ -4,8 +4,8 @@
 
 # Network nodes as generated through Ansible.
 {% for host in play_hosts %}
-{% if 'ansible_eth0' in hostvars[host] %}
-{{ hostvars[host]['ansible_eth0']['ipv4']['address'] }}  {{ host }}
+{% if 'ansible_default_ipv4' in hostvars[host] %}
+{{ hostvars[host].ansible_default_ipv4.address }}  {{ host }}
 {% endif %}
 {% endfor %}
 
@@ -14,7 +14,7 @@
 {% if h.description -%}
 # {{ h.description }}
 {% endif -%}
-{{ h.ip }}  {{ h.names | sort | join(' ' ) }}
+{{ h.ip }}  {{ h.names | join(' ' ) }}
 {% endfor -%}
 {% endif %}
 

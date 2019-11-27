@@ -1,5 +1,13 @@
 ---
 
+
+- debug:
+    var: "{{item}}"
+  when: item is defined
+  loop:
+    - play_hosts
+
+
 - name: Include OS-specific variables.
   include_vars:
     file: "{{ item }}"

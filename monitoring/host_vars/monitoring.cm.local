@@ -1,5 +1,19 @@
 ---
 
+dnsmasq_interface: lo
+dnsmasq_upstream_servers:
+  - 192.168.124.1
+  - 141.1.1.1
+
+# -------------------------------------------------------------------------------------------------
+
+resolv_nameservers:
+  - 127.0.0.1
+  - 141.1.1.1
+resolv_domain: cm.local
+
+# -------------------------------------------------------------------------------------------------
+
 firewalld_ports_open:
   - proto: tcp
     port: 22
@@ -13,16 +27,75 @@ mariadb_bind_address: 127.0.0.1
 mariadb_root_password: monitoring
 
 mariadb_databases:
-  - name: database
+  - name: discovery
     collation: utf8mb4_bin
     encoding: utf8mb4
 
 mariadb_users:
 
-  - name: database
+  - name: discovery
     host: '%'
-    password: database
-    priv: "database.*:ALL"
+    password: discovery
+    priv: "discovery.*:ALL"
+
+# -------------------------------------------------------------------------------------------------
+
+custom_hosts:
+  - ip: 192.168.124.10
+    description: database server
+    names:
+      - database.cm.local
+      - mysql.cm.local
+      - mongo.cm.local
+      - mongodb.cm.local
+  - ip: 192.168.124.20
+    description: backend server
+    names:
+      - backend.cm.local
+      - cms.cm.local
+      - wfs.cm.local
+      - studio.cm.local
+      - preview.cm.local
+      - solr-be.cm.local
+      - feeder-preview.cm.local
+  - ip: 192.168.124.30
+    description: frontend server
+    names:
+      - frontend.cm.local
+      - mls.cm.local
+      - solr-fe.cm.local
+      - solr-master.cm.local
+      - feeder-live.cm.local
+  - ip: 192.168.124.35
+    description: delivery server
+    names:
+      - delivery.cm.local
+      - rls.cm.local
+      - solr-slave.cm.local
+      - cae1.cm.local
+      - cae2.cm.local
+      - overview.cm.local
+      - corporate.cm.local
+
+# -------------------------------------------------------------------------------------------------
+
+rest_service_log_level: DEBUG
+
+
+service_discovery_instances:
+  - name: backend
+    enabled: true
+    state: started
+    jolokia_host: backend.cm.local
+  - name: frontend
+    enabled: false
+    state: stopped
+    jolokia_host: frontend.cm.local
+  - name: delivery
+    enabled: false
+    state: stopped
+    jolokia_host: delivery.cm.local
+
 
 # -------------------------------------------------------------------------------------------------
 
@@ -70,8 +143,22 @@ grafana_datasources:
 # nginx
 #
 nginx_server_tokens: "off"
+nginx_remove_default_vhost: true
+
+nginx_extra_http_options: |
+  map_hash_max_size 128;
+  map_hash_bucket_size 128;
+  map $http_user_agent $ignore_ua {
+    default                 1;
+    "ELB-HealthChecker/1.0" 0;
+    "ELB-HealthChecker/2.0" 0;
+  }
 
 nginx_upstreams:
+  - name: rest_service
+    servers:
+      - '127.0.0.1:8080 max_fails=3 fail_timeout=30s'
+
   - name: grafana
     servers:
       - '127.0.0.1:3000 max_fails=3 fail_timeout=30s'
@@ -79,50 +166,112 @@ nginx_upstreams:
     servers:
       - '127.0.0.1:9090 max_fails=3 fail_timeout=30s'
 
-nginx_vhosts:
 
-  - listen: "80"
-    server_name: '{{ ansible_hostname }} {{ ansible_hostname }}.{{ ansible_domain }}'
+
+nginx_vhosts:
+  - listen: "80 default_server"
+    server_name: _
     filename: '{{ ansible_hostname }}.conf'
-    root: /var/www/html
-    index: index.html
-    access_log: '/var/log/nginx/access.log'
-    error_log:  '/var/log/nginx/error.log'
+    access_log: /var/log/nginx/access.log
+    error_log:  /var/log/nginx/error.log
     extra_parameters: |
-      location / {
-        add_header X-Backend "grafana";
-        proxy_pass http://grafana/;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection "upgrade";
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header Host $host;
-        proxy_redirect off;
+      location = /favicon.ico {
+        log_not_found off;
+        access_log off;
       }
-      location /dist {
-        allow 127.0.0.1;
-        allow 172.20.6.165;
-        allow 172.20.6.166;
-        allow 172.20.6.169;
-        allow 172.20.6.170;
-        allow 172.20.6.171;
+      location = /robots.txt {
+        allow all;
+        log_not_found off;
+        access_log off;
+      }
+      location ~ /\. {
         deny all;
       }
-
-  - listen: 9190
-    server_name: '{{ ansible_hostname }}'
-    filename: 'prometheus.{{ ansible_hostname }}.conf'
-    extra_parameters: |
-      location /prometheus/ {
-        add_header X-Backend "prometheus";
-        proxy_pass http://prometheus/prometheus/;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection "upgrade";
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header Host $host;
-        proxy_redirect off;
+      location ~* /(?:uploads|files)/.*\.php$ {
+        deny all;
       }
-    state: absent
+      location /health {
+        access_log off;
+        return 200;
+      }
+      location /api {
+        # log_not_found       off;
+        access_log          /var/log/nginx/api_access.log;
+        error_log           /var/log/nginx/api_error.log;
+        add_header X-Backend "cm-rest-service";
+        proxy_pass         http://rest_service/;
+        proxy_redirect     default;
+        proxy_set_header   Host              $host;
+        proxy_set_header   X-Real-IP         $remote_addr;
+        proxy_set_header   X-Forwarded-For   $proxy_add_x_forwarded_for;
+        proxy_set_header   X-Forwarded-Proto $http_x_forwarded_proto;
+      }
+      location /web {
+        # log_not_found       off;
+        access_log          /var/log/nginx/web_access.log;
+        error_log           /var/log/nginx/web_error.log;
+        add_header X-Backend "cm-rest-service";
+        proxy_pass         http://rest_service/;
+        proxy_redirect     default;
+        proxy_set_header   Host              $host;
+        proxy_set_header   X-Real-IP         $remote_addr;
+        proxy_set_header   X-Forwarded-For   $proxy_add_x_forwarded_for;
+        proxy_set_header   X-Forwarded-Proto $http_x_forwarded_proto;
+      }
+      location / {
+        return 301 /web;
+        root                  /var/www/entry-page;
+        index                 index.html;
+        if ($ignore_ua) {
+          access_log off;
+        }
+        # access_log            off;
+        # error_log             /dev/stdout;
+      }
+
+
+#   - listen: "80"
+#     server_name: '{{ ansible_hostname }} {{ ansible_hostname }}.{{ ansible_domain }}'
+#     filename: '{{ ansible_hostname }}.conf'
+#     root: /var/www/html
+#     index: index.html
+#     access_log: '/var/log/nginx/access.log'
+#     error_log:  '/var/log/nginx/error.log'
+#     extra_parameters: |
+#       location / {
+#         add_header X-Backend "grafana";
+#         proxy_pass http://grafana/;
+#         proxy_http_version 1.1;
+#         proxy_set_header Upgrade $http_upgrade;
+#         proxy_set_header Connection "upgrade";
+#         proxy_set_header X-Real-IP $remote_addr;
+#         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+#         proxy_set_header Host $host;
+#         proxy_redirect off;
+#       }
+#       location /dist {
+#         allow 127.0.0.1;
+#         allow 172.20.6.165;
+#         allow 172.20.6.166;
+#         allow 172.20.6.169;
+#         allow 172.20.6.170;
+#         allow 172.20.6.171;
+#         deny all;
+#       }
+#
+#   - listen: 9190
+#     server_name: '{{ ansible_hostname }}'
+#     filename: 'prometheus.{{ ansible_hostname }}.conf'
+#     extra_parameters: |
+#       location /prometheus/ {
+#         add_header X-Backend "prometheus";
+#         proxy_pass http://prometheus/prometheus/;
+#         proxy_http_version 1.1;
+#         proxy_set_header Upgrade $http_upgrade;
+#         proxy_set_header Connection "upgrade";
+#         proxy_set_header X-Real-IP $remote_addr;
+#         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+#         proxy_set_header Host $host;
+#         proxy_redirect off;
+#       }
+#     state: absent

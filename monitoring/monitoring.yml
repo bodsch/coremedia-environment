@@ -7,13 +7,17 @@
   environment:
     NETRC: ''
   roles:
-    #- role: common
-    #- role: beanstalkd
-    #- role: mariadb
+    - role: common
+    # - role: dnsmasq
+    # - role: resolv
+    - role: beanstalkd
+    # - role: redis
+    # - role: mariadb
+    # - role: nginx
     - role: rest-service
-    #- role: service-discovery
+    - role: service-discovery
 #     - role: firewalld
-#     - role: redis
+#
 #     - role: trickster
 #     - role: prometheus
 #     - role: grafana
