@@ -8,12 +8,12 @@
     NETRC: ''
   roles:
     - role: common
-    # - role: dnsmasq
-    # - role: resolv
+    - role: dnsmasq
+    - role: resolv
     - role: beanstalkd
-    # - role: redis
-    # - role: mariadb
-    # - role: nginx
+    - role: redis
+    - role: mariadb
+    - role: nginx
     - role: rest-service
     - role: service-discovery
 #     - role: firewalld

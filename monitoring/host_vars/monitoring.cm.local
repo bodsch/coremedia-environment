@@ -79,8 +79,7 @@ custom_hosts:
 
 # -------------------------------------------------------------------------------------------------
 
-rest_service_log_level: DEBUG
-
+# rest_service_log_level: DEBUG
 
 service_discovery_instances:
   - name: backend
