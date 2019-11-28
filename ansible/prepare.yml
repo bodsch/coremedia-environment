@@ -27,11 +27,11 @@
     - role: snakeoil
     - role: portscanner
 
-## prepare the databases
-#- hosts: database
-#  gather_facts: true
-#  become: yes
-#  remote_user: sysadm
-#  roles:
-#    - role: mongodb
-#    - role: mariadb
+# prepare the databases
+- hosts: database
+  gather_facts: true
+  become: yes
+  remote_user: sysadm
+  roles:
+    - role: mongodb
+    - role: mariadb

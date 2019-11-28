@@ -7,6 +7,12 @@ firewalld_ports_open:
     port: 80
   - proto: tcp
     port: 443
+  # jolokia
+  - proto: tcp
+    port: 8080
+  # portscanner
+  - proto: tcp
+    port: 8088
   # solr
   - proto: tcp
     port: 40080
