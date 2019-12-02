@@ -1,7 +1,7 @@
 ---
 
 - hosts: monitoring
-  # gather_facts: true
+  gather_facts: true
   become: yes
   remote_user: sysadm
   environment:
@@ -13,13 +13,17 @@
     - role: beanstalkd
     - role: redis
     - role: mariadb
+    - role: go-carbon
+    - role: carbonapi
     - role: nginx
+    - role: grafana
     - role: rest-service
     - role: service-discovery
+    - role: data-collector
+    - role: carbon-client
+    - role: grafana-client
+
 #     - role: firewalld
-#
 #     - role: trickster
 #     - role: prometheus
-#     - role: grafana
 #     - role: grafana_selinux
-#     - role: nginx

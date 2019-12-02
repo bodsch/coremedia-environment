@@ -79,22 +79,11 @@ custom_hosts:
 
 # -------------------------------------------------------------------------------------------------
 
+# service_discovery_log_level: DEBUG
 # rest_service_log_level: DEBUG
-
-service_discovery_instances:
-  - name: backend
-    enabled: true
-    state: started
-    jolokia_host: backend.cm.local
-  - name: frontend
-    enabled: false
-    state: stopped
-    jolokia_host: frontend.cm.local
-  - name: delivery
-    enabled: false
-    state: stopped
-    jolokia_host: delivery.cm.local
-
+# data_collector_log_level: DEBUG
+# carbon_client_log_level: DEBUG
+# grafana_client_log_level: DEBUG
 
 # -------------------------------------------------------------------------------------------------
 
@@ -105,6 +94,7 @@ trickster_proxy_server_listen_port: 9092
 trickster_metrics_listen_address: '127.0.0.1'
 trickster_cache_type:  'redis'
 
+# -------------------------------------------------------------------------------------------------
 # prometheus
 #
 prometheus_version: 2.13.1
@@ -113,12 +103,15 @@ prometheus_web_listen_address: '127.0.0.1:9091' # "{{ ansible_default_ipv4.addre
 prometheus_storage_retention: "90d"
 prometheus_storage_retention_size: "100MB"
 
+# -------------------------------------------------------------------------------------------------
 # grafana
 #
-grafana_version: '6.4.2'
+grafana_version: '6.5.1'
 
 grafana_address: '127.0.0.1' # '{{ ansible_default_ipv4.address }}'
 grafana_provisioning_synced: true
+grafana_url: "http://monitoring.cm.local/grafana"
+grafana_domain: monitoring.cm.local
 
 grafana_log:
   mode: 'file'
@@ -130,14 +123,23 @@ grafana_security:
 
 # Datasources to configure
 grafana_datasources:
+  - name: "graphite"
+    type: "graphite"
+    access: "proxy"
+    url: 'http://127.0.0.1:8088'
+    # basicAuth: false
+    isDefault: true
+
   - name: "Prometheus"
     type: "prometheus"
     access: "proxy"
     url: 'http://127.0.0.1:9092'
     # basicAuth: false
-    isDefault: true
+    isDefault: false
 
 # grafana_dashboards_dir: ../inventories/monitoring/files/grafana/dashboards
+
+# -------------------------------------------------------------------------------------------------
 
 # nginx
 #
@@ -227,6 +229,22 @@ nginx_vhosts:
         # access_log            off;
         # error_log             /dev/stdout;
       }
+      location /grafana/ {
+
+        log_not_found       off;
+        access_log          off;
+        error_log           off;
+
+        add_header X-Backend "grafana";
+
+        proxy_pass         http://grafana/;
+
+        proxy_set_header   Host              $host;
+        proxy_set_header   X-Real-IP         $remote_addr;
+        proxy_set_header   X-Forwarded-For   $proxy_add_x_forwarded_for;
+        proxy_set_header   X-Forwarded-Proto $scheme;
+      }
+
 
 
 #   - listen: "80"
@@ -274,3 +292,5 @@ nginx_vhosts:
 #         proxy_redirect off;
 #       }
 #     state: absent
+
+# -------------------------------------------------------------------------------------------------
