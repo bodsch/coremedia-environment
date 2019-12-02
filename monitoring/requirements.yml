@@ -1,4 +1,9 @@
 
+- name: openldap
+  src: https://github.com/bodsch/ansible-openldap.git
+  scm: git
+  version: project/monitoring
+
 - name: grafana
   src: https://github.com/cloudalchemy/ansible-grafana.git
   version: 0.14.2

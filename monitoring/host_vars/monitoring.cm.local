@@ -21,6 +21,34 @@ firewalld_ports_open:
     port: 80
 
 # -------------------------------------------------------------------------------------------------
+
+openldap_server_domain_name: ldap.cm.local
+openldap_server_ip: '127.0.0.1'
+openldap_server_rootpw: 'service'
+openldap_server_dc: "dc={{ ',dc='.join(openldap_server_domain_name.split('.') ) }}"
+
+ssh_users:
+  bodsch:
+    password: system
+    cn: "Bodo Schulz"
+    givenname: "Bodo"
+    sn: "Schulz"
+    mail: "bodo@example.com"
+    gecos: bodsch
+    uid: 1043
+    gid: 1042
+#    pubkey: >
+#      ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIL+LmfwIhn8kxZcyusbcITtwsAOnI1I/d/c40XnGBg7J bodo.schulz@tallence.com
+    state: present
+
+ssh_groups:
+  admin:
+    description: Administrators Group
+    gid: 1042
+    members:
+      - bodsch
+
+# -------------------------------------------------------------------------------------------------
 # MariaDB
 
 mariadb_bind_address: 127.0.0.1
@@ -76,6 +104,10 @@ custom_hosts:
       - cae2.cm.local
       - overview.cm.local
       - corporate.cm.local
+  - ip: 192.168.124.50
+    description: monitoring
+    names:
+      - ldap.cm.local
 
 # -------------------------------------------------------------------------------------------------
 

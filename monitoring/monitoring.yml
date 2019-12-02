@@ -8,6 +8,7 @@
     NETRC: ''
   roles:
     - role: common
+    - role: openldap
     - role: dnsmasq
     - role: resolv
     - role: beanstalkd
