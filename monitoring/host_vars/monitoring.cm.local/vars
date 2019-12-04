@@ -24,7 +24,8 @@ firewalld_ports_open:
 
 openldap_server_domain_name: ldap.cm.local
 openldap_server_ip: '127.0.0.1'
-openldap_server_rootpw: 'service'
+openldap_server_rootpw: '{{ vault__openldap__rootpw }}'
+
 openldap_server_dc: "dc={{ ',dc='.join(openldap_server_domain_name.split('.') ) }}"
 
 ssh_users:
@@ -37,8 +38,6 @@ ssh_users:
     gecos: bodsch
     uid: 1043
     gid: 1042
-#    pubkey: >
-#      ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIL+LmfwIhn8kxZcyusbcITtwsAOnI1I/d/c40XnGBg7J bodo.schulz@tallence.com
     state: present
 
 ssh_groups:
@@ -58,13 +57,27 @@ mariadb_databases:
   - name: discovery
     collation: utf8mb4_bin
     encoding: utf8mb4
+  - name: icinga2_auth
+    collation: utf8mb4_bin
+    encoding: utf8mb4
+  - name: icinga2_data
+    collation: utf8mb4_bin
+    encoding: utf8mb4
 
 mariadb_users:
 
   - name: discovery
     host: '%'
-    password: discovery
+    password: '{{ vault__mariadb__discovery }}'
     priv: "discovery.*:ALL"
+  - name: icinga2_data
+    host: 127.0.0.1
+    password: '{{ vault__mariadb__icinga2_data }}'
+    priv: "icinga2_data.*:ALL"
+  - name: icinga2_auth
+    host: 127.0.0.1
+    password: '{{ vault__mariadb__icinga2_auth }}'
+    priv: "icinga2_auth.*:ALL"
 
 # -------------------------------------------------------------------------------------------------
 
@@ -119,21 +132,81 @@ custom_hosts:
 
 # -------------------------------------------------------------------------------------------------
 
-# trickster
-#
-trickster_proxy_server_listen_address: '127.0.0.1'
-trickster_proxy_server_listen_port: 9092
-trickster_metrics_listen_address: '127.0.0.1'
-trickster_cache_type:  'redis'
+# PHP-FPM
+php_enable_php_fpm: true
 
-# -------------------------------------------------------------------------------------------------
-# prometheus
-#
-prometheus_version: 2.13.1
-# we want trickster as cache, also bind to port 9091
-prometheus_web_listen_address: '127.0.0.1:9091' # "{{ ansible_default_ipv4.address }}:9090"
-prometheus_storage_retention: "90d"
-prometheus_storage_retention_size: "100MB"
+php_fpm_pools:
+  - name: worker-01
+    user: www-data
+    group: www-data
+    listen.owner: www-data
+    listen.group: www-data
+    listen: "/run/php/$pool.sock"
+    pm: dynamic
+    pm.max_children: 10
+    pm.start_servers: 4
+    pm.min_spare_servers: 2
+    pm.max_spare_servers: 6
+    pm.status_path: /status
+    ping.path: /ping
+    ping.response: pong
+    access.log: /var/log/php-fpm/$pool_access.log
+    access.format: "%R - %n - %{HTTP_HOST}e - %u %t \"%m %r [%Q%q]\" %s %f %{mili}d %{kilo}M %C%%"
+    chdir: /
+    env:
+      PATH: "/usr/local/bin:/usr/bin:/bin"
+      TMPDIR: "/tmp"
+    php_admin_value:
+      # sendmail_path: "/usr/sbin/sendmail -t -i -f www@my.domain.com"
+      # error_log: "/var/log/fpm-bar.www.log"
+      date.timezone: "Europe/Berlin"
+      log_errors: 'on'
+      max_execution_time: 300
+      memory_limit: 512M
+      # session.save_handler: memcached
+      # session.save_path: "127.0.0.1:11211"
+      upload_max_filesize: 32M
+#      upload_tmp_dir: /var/tmp/fpm/worker-01
+
+php_modules:
+  - name: opcache
+    enabled: true
+    priority: 10
+    content: |
+      zend_extension=opcache.so
+      opcache.enable=1
+      opcache.enable_cli=1
+      opcache.memory_consumption=128
+      opcache.interned_strings_buffer=16
+      opcache.max_accelerated_files=10000
+      opcache.max_wasted_percentage=5
+      opcache.validate_timestamps=1
+      opcache.revalidate_path=0
+      opcache.revalidate_freq=1
+      opcache.max_file_size=0
+  - name: pdo_mysql
+    enabled: true
+    priority: 20
+    content: |
+      extension=pdo_mysql.so
+  - name: apcu
+    enabled: false
+    priority: 20
+    content: |
+      extension=apcu.so
+      apc.shm_size=96M
+      apc.enable_cli=0
+      apc.rfc1867=1
+  - name: gd
+    enabled: true
+    priority: 20
+    content: |
+      extension=gd.so
+  - name: memcached
+    enabled: false
+    priority: 20
+    content: |
+      extension=memcached.so
 
 # -------------------------------------------------------------------------------------------------
 # grafana
@@ -324,5 +397,23 @@ nginx_vhosts:
 #         proxy_redirect off;
 #       }
 #     state: absent
+
+# -------------------------------------------------------------------------------------------------
+
+# trickster
+#
+trickster_proxy_server_listen_address: '127.0.0.1'
+trickster_proxy_server_listen_port: 9092
+trickster_metrics_listen_address: '127.0.0.1'
+trickster_cache_type:  'redis'
+
+# -------------------------------------------------------------------------------------------------
+# prometheus
+#
+prometheus_version: 2.13.1
+# we want trickster as cache, also bind to port 9091
+prometheus_web_listen_address: '127.0.0.1:9091' # "{{ ansible_default_ipv4.address }}:9090"
+prometheus_storage_retention: "90d"
+prometheus_storage_retention_size: "100MB"
 
 # -------------------------------------------------------------------------------------------------

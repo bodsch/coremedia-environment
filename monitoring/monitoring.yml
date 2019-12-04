@@ -8,21 +8,26 @@
     NETRC: ''
   roles:
     - role: common
-    - role: openldap
-    - role: dnsmasq
-    - role: resolv
-    - role: beanstalkd
-    - role: redis
     - role: mariadb
-    - role: go-carbon
-    - role: carbonapi
-    - role: nginx
-    - role: grafana
-    - role: rest-service
-    - role: service-discovery
-    - role: data-collector
-    - role: carbon-client
-    - role: grafana-client
+    - role: php-fpm
+    - role: icingaweb2
+    - role: icinga2
+
+    # - role: openldap
+    # - role: dnsmasq
+    # - role: resolv
+    # - role: beanstalkd
+    # - role: redis
+    # - role: mariadb
+    # - role: go-carbon
+    # - role: carbonapi
+    # - role: nginx
+    # - role: grafana
+    # - role: rest-service
+    # - role: service-discovery
+    # - role: data-collector
+    # - role: carbon-client
+    # - role: grafana-client
 
 #     - role: firewalld
 #     - role: trickster
