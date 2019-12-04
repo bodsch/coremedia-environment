@@ -45,3 +45,17 @@ Take a look into `ansible`
 Take a look into `monitoring`
 
 
+## vault support
+
+```
+openssl rand -base64 2048 > ansible-vault.pass
+
+ansible-vault edit   host_vars/monitoring.cm.local/vault --vault-password-file=ansible-vault.pass
+ansible-vault create host_vars/monitoring.cm.local/vault --vault-password-file=ansible-vault.pass
+
+ansible -i hosts -m debug -a 'var=hostvars[inventory_hostname]' monitoring --vault-password-file=ansible-vault.pass
+
+time ansible-playbook  --inventory=hosts monitoring.yml --vault-password-file=ansible-vault.pass
+
+```
+
