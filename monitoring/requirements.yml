@@ -30,11 +30,11 @@
 # - name: dnsmasq
 #   src: https://github.com/bertvv/ansible-dnsmasq.git
 #   version: v2.1.0
-#
-# - name: mariadb
-#   src: https://github.com/bodsch/ansible-role-mariadb.git
-#   version: feature/support-debian
-#
+
+- name: mariadb
+  src: https://github.com/bodsch/ansible-mariadb.git
+  version: development/need-tests
+
 # - name: nginx
 #   src: https://github.com/geerlingguy/ansible-role-nginx.git
 #   version: 2.7.0
