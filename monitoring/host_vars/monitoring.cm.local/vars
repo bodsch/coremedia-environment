@@ -1,5 +1,10 @@
 ---
 
+fqdn: monitoring.cm.local
+
+# -------------------------------------------------------------------------------------------------
+
+
 dnsmasq_interface: lo
 dnsmasq_upstream_servers:
   - 192.168.124.1
@@ -28,7 +33,7 @@ openldap_server_rootpw: '{{ vault__openldap__rootpw }}'
 
 openldap_server_dc: "dc={{ ',dc='.join(openldap_server_domain_name.split('.') ) }}"
 
-ssh_users:
+openldap_users:
   bodsch:
     password: system
     cn: "Bodo Schulz"
@@ -36,16 +41,32 @@ ssh_users:
     sn: "Schulz"
     mail: "bodo@example.com"
     gecos: bodsch
-    uid: 1043
+    uid: 1042
     gid: 1042
     state: present
+  icinga:
+    password: icinga
+    cn: "Icinga"
+    givenname: "Icinga"
+    sn: "Icinga"
+    mail: "icinga@example.com"
+    gecos: icinga
+    uid: 1043
+    gid: 1043
+    state: present
 
-ssh_groups:
+openldap_groups:
   admin:
     description: Administrators Group
     gid: 1042
     members:
       - bodsch
+  icinga:
+    description: Icinga Group
+    gid: 1043
+    members:
+      - bodsch
+      - icinga
 
 # -------------------------------------------------------------------------------------------------
 # MariaDB
@@ -57,9 +78,7 @@ mariadb_databases:
   - name: discovery
     collation: utf8mb4_bin
     encoding: utf8mb4
-  - name: icingaweb_config
-    collation: utf8mb4_bin
-    encoding: utf8mb4
+
   - name: icinga2_ido
     collation: utf8mb4_bin
     encoding: utf8mb4
@@ -70,14 +89,11 @@ mariadb_users:
     host: '%'
     password: "{{ vault__mariadb__discovery }}"
     priv: "discovery.*:ALL"
+
   - name: icinga2_ido
     host: 127.0.0.1
     password: "{{ vault__mariadb__icinga2_ido }}"
     priv: "icinga2_ido.*:ALL"
-  - name: icingaweb_config
-    host: 127.0.0.1
-    password: "{{ vault__mariadb__icingaweb_config }}"
-    priv: "icingaweb_config.*:ALL"
 
 # -------------------------------------------------------------------------------------------------
 
@@ -121,6 +137,7 @@ custom_hosts:
     description: monitoring
     names:
       - ldap.cm.local
+      - icinga.cm.local
 
 # -------------------------------------------------------------------------------------------------
 
@@ -211,23 +228,56 @@ php_modules:
 # -------------------------------------------------------------------------------------------------
 # icinga2
 
-icinga2_ido:
-#   backend: db
-#   mysql_host: 127.0.0.1
-#   mysql_schemaname: icinga2_ido
-#   mysql_username: icinga2_ido
-  mysql_password: "{{ vault__mariadb__icinga2_ido }}"
+icinga2_certificate_cn: icinga.cm.local
+
+icinga2_feature:
+  ido_mysql:
+    password: "{{ vault__mariadb__icinga2_ido }}"
+  mainlog:
+    severity: warning
+
+icinga2_api_user:
+  root:
+    password: '{{ vault__icinga2_api_user__root }}'
+    client_cn: NodeName
+    permissions: '*'
+  icingaweb:
+    password: '{{ vault__icinga2_api_user__icingaweb }}'
+    client_cn: NodeName
+    permissions: '*'
+
+
+# icinga2_hosts:
+#
+#   monitoring.cm.local:
+#     import: generic-host
+#     address: '{{ ansible_default_ipv4.address }}'
+#     vars: |
+#       os = "Linux"
+#       dist = "{{ ansible_distribution }}"
+#       dist_ver = "{{ ansible_distribution_version }}"
+#       satellite = true
+#       disks = {
+#         "disk /" = {
+#           disk_partitions = "/"
+#         }
+#       }
 
 # -------------------------------------------------------------------------------------------------
 # icingaweb2
 
-icingaweb_config:
-#   backend: db
-#   resource: icingaweb_db
-#   mysql_host: 127.0.0.1
-#   mysql_schemaname: icingaweb_config
-#   mysql_username: icinga2_auth
-  mysql_password: "{{ vault__mariadb__icingaweb_config }}"
+icingaweb_auth_backend:
+  icingaweb:
+    password: "{{ vault__mariadb__icingaweb_config }}"
+  icinga_ido:
+    password: "{{ vault__mariadb__icinga2_ido }}"
+
+icingaweb_users:
+  admin:
+    password: admin
+
+icinga2_api_username: icingaweb
+icinga2_api_password: '{{ vault__icinga2_api_user__icingaweb }}'
 
 # -------------------------------------------------------------------------------------------------
 # grafana
@@ -289,6 +339,7 @@ nginx_upstreams:
   - name: grafana
     servers:
       - '127.0.0.1:3000 max_fails=3 fail_timeout=30s'
+
   - name: prometheus
     servers:
       - '127.0.0.1:9090 max_fails=3 fail_timeout=30s'
@@ -357,9 +408,9 @@ nginx_vhosts:
       }
       location /grafana/ {
 
-        log_not_found       off;
-        access_log          off;
-        error_log           off;
+        #log_not_found       off;
+        #access_log          off;
+        #error_log           off;
 
         add_header X-Backend "grafana";
 
@@ -370,7 +421,41 @@ nginx_vhosts:
         proxy_set_header   X-Forwarded-For   $proxy_add_x_forwarded_for;
         proxy_set_header   X-Forwarded-Proto $scheme;
       }
+      location /icinga {
+        #log_not_found       off;
+        #access_log          off;
+        #error_log           off;
 
+        add_header X-Backend "icingaweb2";
+
+        proxy_set_header   Host              $host;
+        proxy_set_header   X-Real-IP         $remote_addr;
+        proxy_set_header   X-Forwarded-For   $proxy_add_x_forwarded_for;
+        proxy_set_header   X-Forwarded-Proto $http_x_forwarded_proto;
+
+        root  /usr/share/icingaweb2/public;
+
+        index index.php;
+
+        location ~ ^/icinga/index\.php(.*)$ {
+          fastcgi_index          index.php;
+          fastcgi_param          ICINGAWEB_CONFIGDIR /etc/icingaweb2;
+          fastcgi_param          SCRIPT_FILENAME /usr/share/icingaweb2/public/index.php;
+          fastcgi_read_timeout   600;
+          fastcgi_pass           unix:/run/php/worker-01.sock;
+          include fastcgi_params;
+        }
+
+        location ~ ^/icinga(.+)? {
+          alias /usr/share/icingaweb2/public;
+          index index.php;
+          try_files $1 $uri $uri/ /icinga/index.php$is_args$args;
+        }
+
+        location ~* \.(jpg|jpeg|gif|png|css|js|ico|xml)$ {
+          expires 1d;
+        }
+      }
 
 
 #   - listen: "80"

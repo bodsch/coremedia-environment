@@ -8,28 +8,33 @@
     NETRC: ''
   roles:
     - role: common
+    - role: dnsmasq
+    - role: resolv
+    - role: openldap
     - role: mariadb
-    - role: php-fpm
-    - role: icingaweb2
     - role: icinga2
+    - role: php-fpm
+    - role: nginx
+    - role: icingaweb2
+    - role: grafana
+    - role: beanstalkd
+    - role: redis
+    - role: go-carbon
+    - role: carbonapi
+    - role: rest-service
+    - role: service-discovery
+    - role: data-collector
+    - role: carbon-client
+    - role: grafana-client
 
-    # - role: openldap
-    # - role: dnsmasq
-    # - role: resolv
-    # - role: beanstalkd
-    # - role: redis
-    # - role: mariadb
-    # - role: go-carbon
-    # - role: carbonapi
-    # - role: nginx
-    # - role: grafana
-    # - role: rest-service
-    # - role: service-discovery
-    # - role: data-collector
-    # - role: carbon-client
-    # - role: grafana-client
-
-#     - role: firewalld
-#     - role: trickster
-#     - role: prometheus
-#     - role: grafana_selinux
+# - hosts: satellite
+#   gather_facts: true
+#   become: yes
+#   remote_user: sysadm
+#   environment:
+#     NETRC: ''
+#   roles:
+#     # - role: common
+#     # - role: dnsmasq
+#     # - role: resolv
+#     - role: icinga2
