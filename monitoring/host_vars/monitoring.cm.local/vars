@@ -1,9 +1,15 @@
 ---
 
-fqdn: monitoring.cm.local
+snakeoil_extract_to: /etc/coremedia/snakeoil
+snakeoil_domain: cm.local
+snakeoil_alt_names:
+  - dns:
+      - monitoring.cm.local
+      - icinga.cm.local
+      - grafana.cm.local
+      - operations.cm.local
 
 # -------------------------------------------------------------------------------------------------
-
 
 dnsmasq_interface: lo
 dnsmasq_upstream_servers:
@@ -147,6 +153,11 @@ custom_hosts:
 # carbon_client_log_level: DEBUG
 # grafana_client_log_level: DEBUG
 
+icinga2_master: icinga.cm.local
+icinga_client_log_level: DEBUG
+icinga_client_api_username: root
+icinga_client_api_password: "{{vault__icinga2_api_user__root }}"
+
 # -------------------------------------------------------------------------------------------------
 
 # PHP-FPM
@@ -247,21 +258,29 @@ icinga2_api_user:
     permissions: '*'
 
 
-# icinga2_hosts:
-#
-#   monitoring.cm.local:
-#     import: generic-host
-#     address: '{{ ansible_default_ipv4.address }}'
-#     vars: |
-#       os = "Linux"
-#       dist = "{{ ansible_distribution }}"
-#       dist_ver = "{{ ansible_distribution_version }}"
-#       satellite = true
-#       disks = {
-#         "disk /" = {
-#           disk_partitions = "/"
-#         }
-#       }
+icinga2_hosts:
+  monitoring.cm.local:
+    import: generic-host
+    address: '{{ ansible_default_ipv4.address }}'
+    vars: |
+      os = "Linux"
+      dist = "{{ ansible_distribution }}"
+      dist_ver = "{{ ansible_distribution_version }}"
+      disks = {
+        "disk /" = {
+          disk_partitions = "/"
+        }
+      }
+      http_vhosts = {
+        "/" = {
+          http_uri = "/"
+        }
+      }
+      https_vhosts = {
+        "/" = {
+          http_uri = "/"
+        }
+      }
 
 # -------------------------------------------------------------------------------------------------
 # icingaweb2
@@ -347,12 +366,24 @@ nginx_upstreams:
 
 
 nginx_vhosts:
-  - listen: "80 default_server"
+
+  - listen: "80"
     server_name: _
-    filename: '{{ ansible_hostname }}.conf'
+    filename: "05-{{ ansible_hostname }}.conf"
+    return: "301 https://monitoring.{{ ansible_domain }}$request_uri"
+
+  - listen: 443 ssl http2
+#  - listen: "80 default_server"
+    server_name: _
+    filename: '10-{{ ansible_hostname }}.conf'
     access_log: /var/log/nginx/access.log
     error_log:  /var/log/nginx/error.log
     extra_parameters: |
+      ssl_certificate     /etc/coremedia/snakeoil/cm.local/cm.local.pem;
+      ssl_certificate_key /etc/coremedia/snakeoil/cm.local/cm.local.pem;
+      ssl_protocols       TLSv1.1 TLSv1.2;
+      ssl_ciphers         HIGH:!aNULL:!MD5;
+
       location = /favicon.ico {
         log_not_found off;
         access_log off;

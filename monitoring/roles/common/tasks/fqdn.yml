@@ -36,6 +36,8 @@
         owner: root
         group: root
         mode: 0644
+      register:
+        __hostname_changed_4
       when: ansible_os_family == 'RedHat'
 
     - name: "reboot server for enable fqdn"
@@ -45,7 +47,8 @@
       ignore_errors: true
       when: (
           __hostname_changed_1.changed or
-          __hostname_changed_3.changed )
+          __hostname_changed_3.changed or
+          __hostname_changed_4.changed )
 
     - name: "Wait for the reboot to complete if there was a change."
       wait_for_connection:
@@ -55,7 +58,8 @@
         timeout: 300
       when: (
           __hostname_changed_1.changed or
-          __hostname_changed_3.changed )
+          __hostname_changed_3.changed or
+          __hostname_changed_4.changed )
 
   tags:
     - configuration

@@ -3,10 +3,15 @@
 #   src: https://github.com/arillso/ansible.fqdn.git
 #   version: 1.1.0
 
-- name: openldap
-  src: https://github.com/bodsch/ansible-openldap.git
+- name: snakeoil
+  src: https://github.com/bodsch/ansible-snakeoil.git
   scm: git
-  version: project/monitoring
+  version: master
+
+- name: openldap
+  src: https://gitlab.com/bodsch/ansible-openldap.git
+  scm: git
+  version: development/need-tests
 
 - name: icingaweb2
   src: https://gitlab.com/bodsch/ansible-icingaweb2.git
