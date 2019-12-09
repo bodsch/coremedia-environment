@@ -1,15 +1,16 @@
 ---
 
-icinga2_satellite:
-  database.cm.local:
-    import: generic-host
-    vars: |
-      os = "Linux"
-      dist = "{{ ansible_distribution }}"
-      dist_ver = "{{ ansible_distribution_version }}"
-      satellite = true
-      disks = {
-        "disk /" = {
-          disk_partitions = "/"
-        }
-      }
+# icinga2_satellite:
+#   database.cm.local:
+#     import: generic-host
+#     vars: |
+#       os = "Linux"
+#       dist = "{{ ansible_distribution }}"
+#       dist_ver = "{{ ansible_distribution_version }}"
+#       satellite = true
+#       disks = {
+#         "disk /" = {
+#           disk_partitions = "/"
+#         }
+#       }
+#
