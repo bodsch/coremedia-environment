@@ -43,6 +43,11 @@ custom_hosts:
       - cae2.cm.local
       - overview.cm.local
       - corporate.cm.local
+  - ip: 192.168.124.50
+    description: monitoring
+    names:
+      - ldap.cm.local
+      - icinga.cm.local
 
 dnsmasq_interface: lo
 dnsmasq_upstream_servers:
@@ -58,12 +63,19 @@ snakeoil_extract_to: /etc/coremedia/snakeoil
 snakeoil_domain: cm.local
 snakeoil_alt_names:
   - dns:
+      - monitoring.cm.local
+      - icinga.cm.local
+      - grafana.cm.local
+      - operations.cm.local
       - overview.cm.local
       - cae1.cm.local
       - cae3.cm.local
   - ip:
       - 192.168.124.10
-
+      - 192.168.124.20
+      - 192.168.124.30
+      - 192.168.124.40
+      - 192.168.124.50
 
 coremedia_applications:
   content_management_server_tools:
