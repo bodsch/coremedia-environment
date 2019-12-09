@@ -24,11 +24,17 @@ resource "libvirt_volume" "centos_image" {
 }
 
 # ubuntu base system
-resource "libvirt_volume" "ubuntu_image" {
-  name  = "ubuntu-image"
+resource "libvirt_volume" "ubuntu_1904_image" {
+  name  = "ubuntu-image-1904"
   pool   = "default"
-  source = "/var/lib/libvirt/images/eoan-server-cloudimg-amd64.qcow2"
+  source = "/var/lib/libvirt/images/ubuntu-1904-server-cloudimg-amd64.qcow2"
 }
+resource "libvirt_volume" "ubuntu_1910_image" {
+  name  = "ubuntu-image-1910"
+  pool   = "default"
+  source = "/var/lib/libvirt/images/ubuntu-1910-server-cloudimg-amd64.qcow2"
+}
+
 
 data "template_file" "user_data_centos" {
   template = "${file("${path.module}/cloud_init_centos.cfg")}"
@@ -59,7 +65,7 @@ resource "libvirt_cloudinit_disk" "commoninit_debian" {
 # clone from base system and resize ...
 resource "libvirt_volume" "cm-monitoring-qcow2" {
   name           = "cm-${var.server_monitoring["hostname"]}.qcow2"
-  base_volume_id = "${libvirt_volume.ubuntu_image.id}"
+  base_volume_id = "${libvirt_volume.ubuntu_1904_image.id}"
   pool           = "default"
   size           = "${lookup(var.server_monitoring, "disk_size", "") == "" ? "0" : var.server_monitoring["disk_size"] }"
 }
