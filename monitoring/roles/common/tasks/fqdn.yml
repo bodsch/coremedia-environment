@@ -37,8 +37,6 @@
         group: root
         mode: 0644
       when: ansible_os_family == 'RedHat'
-      notify:
-        - Reboot Linux
 
     - name: "reboot server for enable fqdn"
       shell: sleep 2 && reboot
@@ -61,4 +59,3 @@
 
   tags:
     - configuration
-

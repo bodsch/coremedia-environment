@@ -27,14 +27,13 @@
     - role: carbon-client
     - role: grafana-client
 
-# - hosts: satellite
-#   gather_facts: true
-#   become: yes
-#   remote_user: sysadm
-#   environment:
-#     NETRC: ''
-#   roles:
-#     # - role: common
-#     # - role: dnsmasq
-#     # - role: resolv
-#     - role: icinga2
+- hosts: satellite
+  gather_facts: true
+  become: yes
+  remote_user: sysadm
+  environment:
+    NETRC: ''
+  roles:
+    - role: icinga2
+      vars:
+        icinga2_mode: satellite

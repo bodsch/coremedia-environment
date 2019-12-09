@@ -47,3 +47,9 @@ ansible_ssh_user = sysadm
 ansible_ssh_pass = xxx
 ansible_sudo_pass = xxx
 ansible_python_interpreter=/usr/bin/python3
+
+[satellite]
+database.cm.local
+backend.cm.local
+frontend.cm.local
+delivery.cm.local
