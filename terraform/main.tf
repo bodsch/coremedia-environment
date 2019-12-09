@@ -25,12 +25,12 @@ resource "libvirt_volume" "centos_image" {
 
 # ubuntu base system
 resource "libvirt_volume" "ubuntu_1904_image" {
-  name  = "ubuntu-image-1904"
+  name   = "ubuntu-image-1904"
   pool   = "default"
   source = "/var/lib/libvirt/images/ubuntu-1904-server-cloudimg-amd64.qcow2"
 }
 resource "libvirt_volume" "ubuntu_1910_image" {
-  name  = "ubuntu-image-1910"
+  name   = "ubuntu-image-1910"
   pool   = "default"
   source = "/var/lib/libvirt/images/ubuntu-1910-server-cloudimg-amd64.qcow2"
 }
@@ -69,6 +69,13 @@ resource "libvirt_volume" "cm-monitoring-qcow2" {
   pool           = "default"
   size           = "${lookup(var.server_monitoring, "disk_size", "") == "" ? "0" : var.server_monitoring["disk_size"] }"
 }
+
+# resource "libvirt_volume" "cm-satellite-qcow2" {
+#   name           = "cm-${var.server_satellite["hostname"]}.qcow2"
+#   base_volume_id = "${libvirt_volume.ubuntu_1904_image.id}"
+#   pool           = "default"
+#   size           = "${lookup(var.server_satellite, "disk_size", "") == "" ? "0" : var.server_satellite["disk_size"] }"
+# }
 
 resource "libvirt_volume" "cm-database-qcow2" {
   name           = "cm-${var.server_database["hostname"]}.qcow2"
@@ -142,6 +149,48 @@ resource "libvirt_domain" "cm-monitoring" {
     autoport = true
   }
 }
+
+# # Create the machine
+# resource "libvirt_domain" "cm-satellite" {
+#   name   = "${var.server_satellite["hostname"]}"
+#   memory = "${var.server_satellite["memory"]}"
+#   vcpu   = "${var.server_satellite["vcpu"]}"
+#
+#   cloudinit = "${libvirt_cloudinit_disk.commoninit_debian.id}"
+#
+#   network_interface {
+#     network_id = "${libvirt_network.vm_network.id}"
+#
+#     hostname  = "${var.server_satellite["hostname"]}"
+#     addresses = [ "${var.server_satellite["ip"]}" ]
+#     wait_for_lease = 1
+#   }
+#
+#   # IMPORTANT
+#   # Ubuntu can hang is a isa-serial is not present at boot time.
+#   # If you find your CPU 100% and never is available this is why
+#   console {
+#     type        = "pty"
+#     target_port = "0"
+#     target_type = "serial"
+#   }
+#
+#   console {
+#     type        = "pty"
+#     target_type = "virtio"
+#     target_port = "1"
+#   }
+#
+#   disk {
+#     volume_id = "${libvirt_volume.cm-satellite-qcow2.id}"
+#   }
+#
+#   graphics {
+#     type = "spice"
+#     listen_type = "address"
+#     autoport = true
+#   }
+# }
 
 
 resource "libvirt_domain" "cm-database" {

@@ -7,6 +7,9 @@ firewalld_ports_open:
     port: 80
   - proto: tcp
     port: 443
+  # icinga2
+  - proto: tcp
+    port: 5665
   # jolokia
   - proto: tcp
     port: 8080

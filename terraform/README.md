@@ -31,7 +31,8 @@ $ sudo curl -sL https://cloud.centos.org/centos/7/images/CentOS-7-x86_64-Generic
 $ sudo xz -d CentOS-7-x86_64-GenericCloud-1907.qcow2.xz
 $ sudo curl -s https://cloud-images.ubuntu.com/eoan/current/eoan-server-cloudimg-amd64.img   --output ubuntu-1910-server-cloudimg-amd64.qcow2
 $ sudo curl -s https://cloud-images.ubuntu.com/disco/current/disco-server-cloudimg-amd64.img --output ubuntu-1904-server-cloudimg-amd64.qcow2
-
+$ # https://cdimage.debian.org/cdimage/openstack/current-10/
+$ # https://files.devuan.org/devuan_ascii/virtual/devuan_ascii_2.0.0_amd64_qemu.qcow2.xz
 ```
 
 # configure KVM / QEMU

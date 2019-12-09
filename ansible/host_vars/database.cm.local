@@ -6,6 +6,9 @@ firewalld_ports_open:
   # mariadb
   - proto: tcp
     port: 3306
+  # icinga2
+  - proto: tcp
+    port: 5665
   # mongodb
   - proto: tcp
     port: 27017

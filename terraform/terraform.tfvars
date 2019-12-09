@@ -27,3 +27,8 @@ server_monitoring = {
   "memory"    = 2048
   "disk_size" = "10737418240"
 }
+
+monitoring_satellite = {
+  "memory"    = 1024
+  "disk_size" = "10737418240"
+}

@@ -16,6 +16,20 @@ variable "server_monitoring" {
   }
 }
 
+
+variable "server_satellite" {
+  type = "map"
+
+  default = {
+    "memory"    = 512
+    "vcpu"      = 1
+    "disk_size" = ""
+    "ip"        = "192.168.124.60"
+    "hostname"  = "satellite"
+  }
+}
+
+
 variable "server_database" {
   type = "map"
 

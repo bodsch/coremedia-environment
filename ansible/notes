@@ -8,3 +8,21 @@
     - application_checksum
 
 
+
+- debug:
+    var: "{{ item }}"
+  when: item is defined
+  loop:
+    - ansible_hostname
+    - ansible_distribution
+    - ansible_lsb
+    - ansible_service_mgr
+    - ansible_distribution_release
+    - ansible_distribution
+    - ansible_os_family
+    - ansible_is_chroot
+    - ansible_product_name
+    - ansible_swaptotal_mb
+    - ansible_system_vendor
+    - ansible_virtualization_type
+    - ansible_virtualization_role
