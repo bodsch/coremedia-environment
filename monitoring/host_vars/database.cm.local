@@ -14,3 +14,22 @@
 #         }
 #       }
 #
+
+# -------------------------------------------------------------------------------------------------
+
+# {
+#   "name": "database.cm.local",
+#   "address": "database.cm.local",
+#   "display_name": "database.cm.local",
+#   "enable_notifications": false,
+#   "vars": {
+#     "mysql": {
+#       "port": 3306,
+#       "monitoring_user": "monitoring",
+#       "monitoring_password": "monitoring"
+#     },
+#     "mongodb": {
+#       "port": 27017
+#     }
+#   }
+# }

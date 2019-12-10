@@ -151,7 +151,8 @@ custom_hosts:
 # rest_service_log_level: DEBUG
 # data_collector_log_level: DEBUG
 # carbon_client_log_level: DEBUG
-# grafana_client_log_level: DEBUG
+
+grafana_client_log_level: DEBUG
 
 icinga2_master: icinga.cm.local
 icinga_client_log_level: DEBUG

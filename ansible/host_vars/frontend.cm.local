@@ -53,8 +53,8 @@ caefeeder_live_database:
   host: mysql.cm.local
 
 
-solr:
-  log_level: DEBUG
+#solr:
+#  log_level: DEBUG
 
 
 master_live:

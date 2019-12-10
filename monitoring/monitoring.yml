@@ -7,38 +7,38 @@
   environment:
     NETRC: ''
   roles:
-    #- role: common
-    - role: snakeoil
-    #- role: dnsmasq
-    #- role: resolv
-    #- role: openldap
-    #- role: mariadb
-    #- role: icinga2
-    #- role: php-fpm
-    - role: nginx
-    #- role: icingaweb2
-    #- role: grafana
-    #- role: beanstalkd
-    #- role: redis
-    #- role: go-carbon
-    #- role: carbonapi
-    #- role: rest-service
-    #- role: service-discovery
-    #- role: data-collector
-    #- role: carbon-client
-    #- role: grafana-client
+    # - role: common
+    # - role: snakeoil
+    # - role: dnsmasq
+    # - role: resolv
+    # - role: openldap
+    # - role: mariadb
+    # - role: icinga2
+    # - role: php-fpm
+    # - role: nginx
+    # - role: icingaweb2
+    # - role: grafana
+    # - role: beanstalkd
+    # - role: redis
+    # - role: go-carbon
+    # - role: carbonapi
+    # - role: rest-service
+    # - role: service-discovery
+    # - role: data-collector
+    # - role: carbon-client
+    # - role: grafana-client
     - role: icinga-client
 
-#- hosts: satellite
-#  gather_facts: true
-#  become: yes
-#  remote_user: sysadm
-#  environment:
-#    NETRC: ''
-#  roles:
-#    - role: icinga2
-#      vars:
-#        icinga2_mode: satellite
-#        icinga2_server: monitoring.cm.local
-#        icinga2_master: icinga.cm.local
-#        icinga2_certificate_cn: "{{ ansible_fqdn }}"
+- hosts: satellite
+  gather_facts: true
+  become: yes
+  remote_user: sysadm
+  environment:
+    NETRC: ''
+  roles:
+    - role: icinga2
+      vars:
+        icinga2_mode: satellite
+        icinga2_server: monitoring.cm.local
+        icinga2_master: icinga.cm.local
+        icinga2_certificate_cn: "{{ ansible_fqdn }}"

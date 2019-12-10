@@ -10,17 +10,17 @@ server_database = {
 
 server_backend = {
   "memory"    = 4096
-  "disk_size" = "10737418240"
+#  "disk_size" = "10737418240"
 }
 
 server_frontend = {
-  "memory"    = 1024
-  "disk_size" = "10737418240"
+  "memory"    = 4096
+#  "disk_size" = "10737418240"
 }
 
 server_delivery = {
   "memory"    = 2048
-  "disk_size" = "10737418240"
+#  "disk_size" = "10737418240"
 }
 
 server_monitoring = {

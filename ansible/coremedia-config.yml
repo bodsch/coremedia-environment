@@ -2,8 +2,6 @@
 # all parameters for ann CoreMedia system
 #
 
-icinga2_mode: satellite
-
 artefact_server: "http://192.168.124.1"
 application_version: 1904.2
 

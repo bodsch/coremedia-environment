@@ -23,3 +23,51 @@
 #           http_uri = "/"
 #         }
 #       }
+
+# -------------------------------------------------------------------------------------------------
+
+# {
+#   "name": "delivery.cm.local",
+#   "address": "delivery.cm.local",
+#   "display_name": "delivery.cm.local",
+#   "enable_notifications": false,
+#   "vars": {
+#     "http": true,
+#     "https": true,
+#     "solr_master": {
+#       "port": 40099,
+#       "port_http": 40080,
+#       "cores": [
+#         "live",
+#         "preview",
+#         "studio"
+#       ]
+#     },
+#     "replication_live_server": {
+#       "port": 42099,
+#       "port_http": 42080,
+#       "ior": true,
+#       "runlevel": true,
+#       "license": true,
+#       "sequencenumbers": true,
+#       "heap_cache": true
+#     },
+#     "cae_live_1": {
+#       "port": 42199,
+#       "cap_connection": true,
+#       "uapi_cache": true,
+#       "blob_cache": true,
+#       "heap_cache": true,
+#       "content_repository": true
+#     },
+#     "cae_live_2": {
+#       "port": 42299,
+#       "cap_connection": true,
+#       "uapi_cache": true,
+#       "blob_cache": true,
+#       "heap_cache": true,
+#       "content_repository": true
+#     }
+#   },
+#   "zone": "delivery.cm.local"
+# }

@@ -14,3 +14,39 @@
 #         }
 #       }
 #
+
+# -------------------------------------------------------------------------------------------------
+
+# {
+#   "name": "frontend.cm.local",
+#   "address": "frontend.cm.local",
+#   "display_name": "frontend.cm.local",
+#   "enable_notifications": false,
+#   "vars": {
+#     "solr_master": {
+#       "port": 40099,
+#       "port_http": 40080,
+#       "cores": [
+#         "live",
+#         "preview",
+#         "studio"
+#       ]
+#     },
+#     "master_live_server": {
+#       "port": 40299,
+#       "port_http": 40280,
+#       "ior": true,
+#       "runlevel": true,
+#       "license": true,
+#       "heap_cache": true
+#     },
+#     "caefeeder_live": {
+#       "port": 40899,
+#       "feeder": "live",
+#       "cap_connection": true,
+#       "uapi_cache": true,
+#       "heap_cache": true,
+#       "content_repository": true
+#     }
+#   }
+# }

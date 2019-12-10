@@ -92,3 +92,8 @@
   scm: git
   version: master
 
+- name: icinga-client
+  src: https://gitlab.com/coremedia-monitoring/ansible-icinga-client.git
+  scm: git
+  version: master
+
