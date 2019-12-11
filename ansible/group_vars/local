@@ -1,4 +1,0 @@
----
-
-aws_instance_type: 'm5.2xlarge'
-aws_image: 'ami-e4515e0e'

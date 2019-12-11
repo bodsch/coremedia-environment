@@ -1,6 +1,0 @@
-*.retry
-roles/*
-files/*.zip
-files/*.war
-files/.*jar
-

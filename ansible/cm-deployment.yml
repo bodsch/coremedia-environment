@@ -1,9 +1,0 @@
----
-
-- hosts: delivery,frontend,backend
-  gather_facts: true
-  become: yes
-  remote_user: coremedia-ci
-  roles:
-    - role: cm-licenses
-    - role: cm-deployment
