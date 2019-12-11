@@ -1,19 +1,43 @@
 ---
 
-# icinga2_satellite:
-#   frontend.cm.local:
-#     import: generic-host
-#     vars: |
-#       os = "Linux"
-#       dist = "{{ ansible_distribution }}"
-#       dist_ver = "{{ ansible_distribution_version }}"
-#       satellite = true
-#       disks = {
-#         "disk /" = {
-#           disk_partitions = "/"
-#         }
-#       }
-#
+icinga2_satellite:
+  frontend.cm.local:
+    import: generic-host
+    vars: |
+      os = "Linux"
+      dist = "{{ ansible_distribution }}"
+      dist_ver = "{{ ansible_distribution_version }}"
+      satellite = true
+      disks = {
+        "disk /" = {
+          disk_partitions = "/"
+        }
+      }
+      solr_master = {
+        port = 40099
+        port_http = 40080
+        cores = [
+          "live",
+          "preview",
+          "studio"
+        ]
+      }
+      master_live_server = {
+        port = 40299
+        port_http = 40280
+        ior = true
+        runlevel = true
+        license = true
+        heap_cache = true
+      }
+      caefeeder_live = {
+        port = 40899
+        feeder = "live"
+        cap_connection = true
+        uapi_cache = true
+        heap_cache = true
+        content_repository = true
+      }
 
 # -------------------------------------------------------------------------------------------------
 

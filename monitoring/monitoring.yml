@@ -7,27 +7,27 @@
   environment:
     NETRC: ''
   roles:
-    # - role: common
-    # - role: snakeoil
-    # - role: dnsmasq
-    # - role: resolv
-    # - role: openldap
-    # - role: mariadb
-    # - role: icinga2
-    # - role: php-fpm
-    # - role: nginx
-    # - role: icingaweb2
-    # - role: grafana
-    # - role: beanstalkd
-    # - role: redis
-    # - role: go-carbon
-    # - role: carbonapi
-    # - role: rest-service
-    # - role: service-discovery
-    # - role: data-collector
-    # - role: carbon-client
-    # - role: grafana-client
+    - role: common
+    - role: snakeoil
+    - role: dnsmasq
+    - role: resolv
+    - role: mariadb
+    - role: openldap
+    - role: nginx
+    - role: beanstalkd
+    - role: redis
+    - role: go-carbon
+    - role: carbonapi
+    - role: rest-service
+    - role: service-discovery
+    - role: data-collector
+    - role: carbon-client
+    - role: grafana-client
     - role: icinga-client
+    - role: php-fpm
+    - role: icingaweb2
+    - role: icinga2
+    - role: grafana
 
 - hosts: satellite
   gather_facts: true
