@@ -3,6 +3,7 @@
 digraph D {
 
   dpi = 196
+  newrank = true
 
   node [
     shape     = record
@@ -17,73 +18,78 @@ digraph D {
   ranksep  = 0.75;
   nodesep  = 0.75;
 
-  subgraph cluster_database {
-
-    bgcolor  = chartreuse3
-    label    = "database"
-
-    mysql         [ label = "mysql" ]
-    mongodb       [ label = "mongodb" ]
-  }
-
-
   subgraph cluster_backend {
 
-    label    = "backend"
-    bgcolor  = lightblue
+    label   = "cluster"
+    bgcolor = chartreuse3
 
-    httpd_be        [ label = "httpd" ]
-    cae_preview     [ label = "cae-preview" ]
-    studio          [ label = "studio" ]
-    solr_be         [ label = "solr" ]
+    subgraph cluster_backend_dba {
 
-    httpd_be        -> cae_preview
-    httpd_be        -> studio
+      label    = "backend database"
+      bgcolor  = lightblue
 
-    cae_preview     -> solr_be
-    cae_preview     -> mongodb
-    cae_preview     -> cms
+      mysql_be        [ label = "mysql" ]
+      mongodb         [ label = "mongodb" ]
+      solr_be         [ label = "solr" ]
+    }
 
-    content_feeder  -> cms
-    content_feeder  -> solr_be
+    subgraph cluster_backend_server {
 
-    cms             [ label = "content-management-server" color = "dodgerblue" style = filled ]
-    content_feeder  [ label = "content-feeder" ]
-    user_changes    [ label = "user-changes" ]
-    elastic_worker  [ label = "elastic-worker" ]
-    sitemanager     [ label = "sitemanager" ]
-    feeder_preview  [ label = "caefeeder-preview" ]
+      label    = "backend services"
+      bgcolor  = antiquewhite
 
-    workflow_server [ label = "workflow-server" ]
+      httpd_be        [ label = "httpd" ]
+      cae_preview     [ label = "cae-preview" ]
+      studio          [ label = "studio" ]
+      cms             [ label = "content-management-server" color = "dodgerblue" style = filled ]
+      content_feeder  [ label = "content-feeder" ]
+      user_changes    [ label = "user-changes" ]
+      elastic_worker  [ label = "elastic-worker" ]
+//       sitemanager     [ label = "sitemanager" ]
+      feeder_preview  [ label = "caefeeder-preview" ]
+      workflow_server [ label = "workflow-server" ]
 
-    studio          -> workflow_server
-    studio          -> solr_be
-    studio          -> cms
-    studio          -> mongodb
+      httpd_be        -> cae_preview
+      httpd_be        -> studio
+      cae_preview     -> cms
+      content_feeder  -> cms
+      studio          -> workflow_server
+      studio          -> cms
+      workflow_server -> cms
+      feeder_preview  -> cms
+      elastic_worker  -> cms
+      user_changes    -> cms
+//       sitemanager     -> cms
 
-    cms             -> solr_be
-    workflow_server -> cms
-    workflow_server -> mongodb
-
-    feeder_preview  -> solr_be
-    feeder_preview  -> cms
-
-    elastic_worker  -> cms
-    elastic_worker  -> mongodb
-
-    user_changes    -> cms
-    user_changes    -> mongodb
-
-    sitemanager     -> cms
-
-    cms             -> mysql
-    feeder_preview  -> mysql
+      user_changes    -> mongodb
+      cae_preview     -> mongodb
+      studio          -> mongodb
+      workflow_server -> mongodb
+      elastic_worker  -> mongodb
+      user_changes    -> mongodb
+      cms             -> mysql_be
+      feeder_preview  -> mysql_be
+      cae_preview     -> solr_be
+      content_feeder  -> solr_be
+      studio          -> solr_be
+      cms             -> solr_be
+      feeder_preview  -> solr_be
+    }
   }
 
   subgraph cluster_frontend {
 
     label   = "frontend cluster"
     bgcolor = chartreuse3
+
+
+    subgraph cluster_database_fe {
+
+      label    = "frontend database"
+      bgcolor  = lightblue
+
+      mysql_fe         [ label = "mysql" ]
+    }
 
     subgraph cluster_content_server {
 
@@ -94,16 +100,14 @@ digraph D {
       feeder_live [ label = "caefeeder-live" ]
       solr_fe     [ label = "solr (master)" ]
 
-
       feeder_live     -> solr_fe
       feeder_live     -> mls
-      feeder_live     -> mysql
-      // mls             -> rls [ dir=both ]
-      mls             -> mysql
+      feeder_live     -> mysql_fe
+      mls             -> mysql_fe
 
-      cms             -> mls [ penwidth = 2, color = "red" ]
+      cms             -> mls [ penwidth = 2, color = "red"]
+
     }
-
 
     subgraph cluster_delivery {
 
@@ -122,7 +126,7 @@ digraph D {
       httpd_fe  -> cae2
       httpd_fe  -> cae3
 
-      solr_fe_slave -> solr_fe
+      solr_fe_slave -> solr_fe [ constraint = false ]
 
       cae1      -> rls
       cae1      -> solr_fe_slave
@@ -133,8 +137,16 @@ digraph D {
       cae3      -> rls
       cae3      -> solr_fe_slave
 
-      rls       -> mysql
+      rls       -> mysql_fe
       rls       -> mls [ penwidth = 2, color = "red" ]
     }
   }
+
+
+  { rank = same; mysql_be; mongodb; solr_be }
+  { rank = same; cms; mls; rls; }
+  { rank = same; httpd_fe; httpd_be; }
+  { rank = same; solr_fe; solr_fe_slave; }
+  { rank = same; cae_preview; cae1; cae2; cae3; }
+  { rank = same; feeder_live; feeder_preview; content_feeder }
 }
