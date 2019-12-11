@@ -30,7 +30,6 @@ digraph D {
 
       mysql_be        [ label = "mysql" ]
       mongodb         [ label = "mongodb" ]
-      solr_be         [ label = "solr" ]
     }
 
     subgraph cluster_backend_server {
@@ -48,6 +47,7 @@ digraph D {
 //       sitemanager     [ label = "sitemanager" ]
       feeder_preview  [ label = "caefeeder-preview" ]
       workflow_server [ label = "workflow-server" ]
+      solr_be         [ label = "solr" ]
 
       httpd_be        -> cae_preview
       httpd_be        -> studio
@@ -143,8 +143,8 @@ digraph D {
   }
 
 
-  { rank = same; mysql_be; mongodb; solr_be }
-  { rank = same; cms; mls; rls; }
+  { rank = same; mysql_be; mongodb }
+  { rank = same; cms; mls; rls; solr_be; }
   { rank = same; httpd_fe; httpd_be; }
   { rank = same; solr_fe; solr_fe_slave; }
   { rank = same; cae_preview; cae1; cae2; cae3; }
