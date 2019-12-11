@@ -45,38 +45,11 @@ I separated the repositories a bit and put them together in a GitLab group.
 
 https://gitlab.com/coremedia-as-code/infrastructure
 
-### Ansible Deployment
+### deployment
 
-https://gitlab.com/coremedia-as-code/ansible-coremedia
+https://gitlab.com/coremedia-as-code/deployment
 
-### Monitoring
+### monitoring
 
 https://gitlab.com/coremedia-as-code/monitoring
-
-
-
-Take a look into `terraform`
-
-# deploy the CoreMedia stack
-
-Take a look into `ansible`
-
-# take a look in the monitoring
-
-Take a look into `monitoring`
-
-
-## vault support
-
-```
-openssl rand -base64 2048 > ansible-vault.pass
-
-ansible-vault edit   host_vars/monitoring.cm.local/vault --vault-password-file=ansible-vault.pass
-ansible-vault create host_vars/monitoring.cm.local/vault --vault-password-file=ansible-vault.pass
-
-ansible -i hosts -m debug -a 'var=hostvars[inventory_hostname]' monitoring --vault-password-file=ansible-vault.pass
-
-time ansible-playbook  --inventory=hosts monitoring.yml --vault-password-file=ansible-vault.pass
-
-```
 
