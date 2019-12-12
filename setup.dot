@@ -20,12 +20,12 @@ digraph D {
 
   subgraph cluster_backend {
 
-    label   = "cluster"
+    label   = "backend cluster"
     bgcolor = chartreuse3
 
     subgraph cluster_backend_dba {
 
-      label    = "backend database"
+      label    = "backend database / 192.168.124.10"
       bgcolor  = lightblue
 
       mysql_be        [ label = "mysql" ]
@@ -34,7 +34,7 @@ digraph D {
 
     subgraph cluster_backend_server {
 
-      label    = "backend services"
+      label    = "backend services / 192.168.124.20"
       bgcolor  = antiquewhite
 
       httpd_be        [ label = "httpd" ]
@@ -85,7 +85,7 @@ digraph D {
 
     subgraph cluster_database_fe {
 
-      label    = "frontend database"
+      label    = "frontend database / 192.168.124.11"
       bgcolor  = lightblue
 
       mysql_fe         [ label = "mysql" ]
@@ -93,7 +93,7 @@ digraph D {
 
     subgraph cluster_content_server {
 
-      label   = "content server"
+      label   = "frontend server / 192.168.124.30"
       bgcolor = antiquewhite
 
       mls         [ label = "master-live-server" color = "dodgerblue" style = filled ]
@@ -111,7 +111,7 @@ digraph D {
 
     subgraph cluster_delivery {
 
-      label   = "delivery"
+      label   = "delivery / 192.168.124.35"
       bgcolor = antiquewhite
 
       httpd_fe      [ label = "httpd" ]
