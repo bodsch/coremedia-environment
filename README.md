@@ -24,17 +24,38 @@ For further information or problem analyses, both CoreMedia and my employer - or
 
 ---
 
-My recommendation for a CoreMedia setup is as follows
+## setup
 
-| Virtual Machine         | Services |
-| :------                 | :---------- |
-| **database backend**    | mysql, mongodb, solr |
-| **database frontend**   | mysql |
-| **backend**      | content-management-server, content-feeder, user-changes, elastic-worker, cae-preview,<br> studio, caefeeder-preview, workflow-server |
-| **frontend**     | master-live-server, caefeeder-live, solr-master |
-| **delivery**     | replication-live-server, cae-live-1, cae-live-2, cae-live-3, solr-slave |
+My recommendation for a staging CoreMedia setup is as follows
+
+| Virtual Machine         | Resources                    | Services    |
+| :------                 | :-----------                 | :---------- |
+| **database backend**    | 1 vCPU, 1 GiB RAM, 8 GiB HDD | mysql, mongodb, solr |
+| **database frontend**   | 1 vCPU, 2 GiB RAM, 8 GiB HDD | mysql |
+| **backend**             | 2 vCPU, 4 GiB RAM, 8 GiB HDD | content-management-server, content-feeder, user-changes, elastic-worker, cae-preview,<br> studio, caefeeder-preview, workflow-server |
+| **frontend**            | 2 vCPU, 4 GiB RAM, 8 GiB HDD | master-live-server, caefeeder-live, solr-master |
+| **delivery**            | 1 vCPU, 2 GiB RAM, 8 GiB HDD | replication-live-server, cae-live-1, cae-live-2, cae-live-3, solr-slave |
 
 ![setup](setup.png)
+
+## security
+
+For security reasons, the connections between the different environments and the VMs have been reduced to a minimum.
+
+In addition, communication between the VMs on the VMs is restricted using iptables.
+
+My recommendation is also to equip all VMs with an additional network card. This should be used for communication between the CoreMedia Services.
+
+## scalability
+
+The only application that can sensibly handle more traffic is an additional CAE.
+
+However, for performance reasons, an RLS can only serve a limited number of CAEs.
+
+In the case of excessive and high-frequency traffic, an additional VM with an RLS and additional CAEs can be included in the setup.
+
+With high-frequency websites, you should consider whether including an external CDN in the architecture could be a worthwhile investment.
+
 
 
 ## repositories

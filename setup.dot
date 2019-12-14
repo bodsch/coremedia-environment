@@ -20,7 +20,7 @@ digraph D {
 
   subgraph cluster_backend {
 
-    label   = "backend cluster"
+    label   = "management cluster"
     bgcolor = chartreuse3
 
     subgraph cluster_backend_dba {
@@ -79,7 +79,7 @@ digraph D {
 
   subgraph cluster_frontend {
 
-    label   = "frontend cluster"
+    label   = "delivery cluster"
     bgcolor = chartreuse3
 
 
