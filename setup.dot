@@ -25,7 +25,7 @@ digraph D {
 
     subgraph cluster_backend_dba {
 
-      label    = "backend database / 192.168.124.10"
+      label    = "backend database / 192.168.124.110"
       bgcolor  = lightblue
 
       mysql_be        [ label = "mysql" ]
@@ -85,7 +85,7 @@ digraph D {
 
     subgraph cluster_database_fe {
 
-      label    = "frontend database / 192.168.124.11"
+      label    = "frontend database / 192.168.124.100"
       bgcolor  = lightblue
 
       mysql_fe         [ label = "mysql" ]
