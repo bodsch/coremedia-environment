@@ -1,0 +1,307 @@
+#
+
+digraph D {
+
+  dpi = 196
+  newrank = true
+
+  node [
+    shape     = record
+  ]
+
+  edge [
+    arrowhead = normal
+    arrowsize = 0.7
+  ]
+
+  splines  = ortho;
+  ranksep  = 0.75;
+  nodesep  = 0.75;
+
+  subgraph cluster_backend {
+
+    label   = "cluster"
+    bgcolor = chartreuse3
+
+    subgraph cluster_backend_dba {
+
+      label    = "backend database"
+      bgcolor  = lightblue
+
+      mysql_be        [ label = "mysql" ]
+      mongodb         [ label = "mongodb" ]
+
+      icinga2_satellite_backend_dba     [ label = "icinga2" color = "sandybrown" style = filled ]
+      graphythe_daemon_backend_dba      [ label = "graphythe-daemon" color = "sandybrown" style = filled ]
+
+      icinga2_satellite_backend_dba   -> mysql_be [ color = "sandybrown" ]
+      icinga2_satellite_backend_dba   -> mongodb [ color = "sandybrown" ]
+
+      graphythe_daemon_backend_dba   -> mysql_be [ color = "sandybrown" ]
+      graphythe_daemon_backend_dba   -> mongodb [ color = "sandybrown" ]
+    }
+
+    subgraph cluster_backend_server {
+
+      label    = "backend services"
+      bgcolor  = antiquewhite
+
+      httpd_be        [ label = "httpd" ]
+      cae_preview     [ label = "cae-preview" ]
+      studio          [ label = "studio" ]
+      cms             [ label = "content-management-server" color = "dodgerblue" style = filled ]
+      content_feeder  [ label = "content-feeder" ]
+      user_changes    [ label = "user-changes" ]
+      elastic_worker  [ label = "elastic-worker" ]
+//       sitemanager     [ label = "sitemanager" ]
+      feeder_preview  [ label = "caefeeder-preview" ]
+      workflow_server [ label = "workflow-server" ]
+      solr_be         [ label = "solr" ]
+
+      jolokia_backend             [ label = "jolokia" color = "sandybrown" style = filled ]
+      icinga2_satellite_backend   [ label = "icinga2" color = "sandybrown" style = filled ]
+      graphythe_daemon_backend    [ label = "graphythe-daemon" color = "sandybrown" style = filled ]
+
+      httpd_be        -> cae_preview
+      httpd_be        -> studio
+      cae_preview     -> cms
+      content_feeder  -> cms
+      studio          -> workflow_server
+      studio          -> cms
+      workflow_server -> cms
+      feeder_preview  -> cms
+      elastic_worker  -> cms
+      user_changes    -> cms
+//       sitemanager     -> cms
+
+      user_changes    -> mongodb
+      cae_preview     -> mongodb
+      studio          -> mongodb
+      workflow_server -> mongodb
+      elastic_worker  -> mongodb
+      user_changes    -> mongodb
+      cms             -> mysql_be
+      feeder_preview  -> mysql_be
+      cae_preview     -> solr_be
+      content_feeder  -> solr_be
+      studio          -> solr_be
+      cms             -> solr_be
+      feeder_preview  -> solr_be
+
+      jolokia_backend -> cae_preview [ color = "sandybrown" ]
+      jolokia_backend -> studio [ color = "sandybrown" ]
+      jolokia_backend -> cms [ color = "sandybrown" ]
+      jolokia_backend -> content_feeder [ color = "sandybrown" ]
+      jolokia_backend -> user_changes [ color = "sandybrown" ]
+      jolokia_backend -> elastic_worker [ color = "sandybrown" ]
+      jolokia_backend -> feeder_preview [ color = "sandybrown" ]
+      jolokia_backend -> workflow_server [ color = "sandybrown" ]
+      jolokia_backend -> solr_be [ color = "sandybrown" ]
+
+      icinga2_satellite_backend -> jolokia_backend [ color = "sandybrown" ]
+      icinga2_satellite_backend -> mongodb [ color = "sandybrown" ]
+      icinga2_satellite_backend -> solr_be [ color = "sandybrown" ]
+      icinga2_satellite_backend -> httpd_be [ color = "sandybrown" ]
+      graphythe_daemon_backend  -> jolokia_backend [ color = "sandybrown" ]
+
+
+    }
+  }
+
+  subgraph cluster_frontend {
+
+    label   = "frontend cluster"
+    bgcolor = chartreuse3
+
+
+    subgraph cluster_database_fe {
+
+      label    = "frontend database"
+      bgcolor  = lightblue
+
+      mysql_fe         [ label = "mysql" ]
+
+      icinga2_satellite_frontend_dba     [ label = "icinga2" color = "sandybrown" style = filled ]
+      graphythe_daemon_frontend_dba      [ label = "graphythe-daemon" color = "sandybrown" style = filled ]
+
+      icinga2_satellite_frontend_dba  -> mysql_fe [ color = "sandybrown" ]
+      graphythe_daemon_frontend_dba   -> mysql_fe [ color = "sandybrown" ]
+    }
+
+
+    subgraph cluster_delivery {
+
+      label   = "delivery"
+      bgcolor = antiquewhite
+
+      httpd_fe      [ label = "httpd" ]
+      rls           [ label = "replication-live-server" color = "dodgerblue" style = filled ]
+      cae1          [ label = "cae-live-1" ]
+      cae2          [ label = "cae-live-2" ]
+      cae3          [ label = "cae-live-3" ]
+
+      solr_fe_slave [ label = "solr (slave)" ]
+
+      jolokia_delivery               [ label = "jolokia" color = "sandybrown" style = filled ]
+      icinga2_satellite_delivery     [ label = "icinga2" color = "sandybrown" style = filled ]
+      graphythe_daemon_delivery      [ label = "graphythe-daemon" color = "sandybrown" style = filled ]
+
+      httpd_fe  -> cae1
+      httpd_fe  -> cae2
+      httpd_fe  -> cae3
+
+
+
+      cae1      -> rls
+      cae1      -> solr_fe_slave
+
+      cae2      -> rls
+      cae2      -> solr_fe_slave
+
+      cae3      -> rls
+      cae3      -> solr_fe_slave
+
+      rls       -> mysql_fe
+
+      icinga2_satellite_delivery  -> jolokia_delivery [ color = "sandybrown" ]
+      graphythe_daemon_delivery   -> jolokia_delivery [ color = "sandybrown" ]
+
+      jolokia_delivery -> rls [ color = "sandybrown" ]
+      jolokia_delivery -> cae1 [ color = "sandybrown" ]
+      jolokia_delivery -> cae2 [ color = "sandybrown" ]
+      jolokia_delivery -> cae3 [ color = "sandybrown" ]
+      jolokia_delivery -> solr_fe_slave [ color = "sandybrown" ]
+
+      icinga2_satellite_delivery  -> httpd_fe [ color = "sandybrown" ]
+      graphythe_daemon_delivery   -> httpd_fe [ color = "sandybrown" ]
+    }
+
+
+    subgraph cluster_content_server {
+
+      label   = "content server"
+      bgcolor = antiquewhite
+
+      mls         [ label = "master-live-server" color = "dodgerblue" style = filled ]
+      feeder_live [ label = "caefeeder-live" ]
+      solr_fe     [ label = "solr (master)" ]
+
+      jolokia_frontend               [ label = "jolokia" color = "sandybrown" style = filled ]
+      icinga2_satellite_frontend     [ label = "icinga2" color = "sandybrown" style = filled ]
+      graphythe_daemon_frontend      [ label = "graphythe-daemon" color = "sandybrown" style = filled ]
+
+      feeder_live     -> solr_fe
+      feeder_live     -> mls
+      feeder_live     -> mysql_fe
+      mls             -> mysql_fe
+
+      icinga2_satellite_frontend  -> jolokia_frontend [ color = "sandybrown" ]
+      graphythe_daemon_frontend   -> jolokia_frontend [ color = "sandybrown" ]
+
+      jolokia_frontend -> mls [ color = "sandybrown" ]
+      jolokia_frontend -> feeder_live [ color = "sandybrown" ]
+      jolokia_frontend -> solr_fe [ color = "sandybrown" ]
+    }
+  }
+
+  subgraph cluster_monitoring {
+
+    label   = "monitoring services"
+    bgcolor = sandybrown
+
+    subgraph cluster_backend_server {
+
+      // label    = "monitoring services"
+      bgcolor  = lemonchiffon3
+
+      httpd_monitoring [ label = "httpd" color = "sandybrown" style = filled ]
+      icingaweb        [ label = "icingaweb" color = "sandybrown" style = filled ]
+      grafana          [ label = "grafana" color = "sandybrown" style = filled ]
+      algernon         [ label = "algernon" color = "sandybrown" style = filled ]
+      go_carbon        [ label = "go-carbon" color = "sandybrown" style = filled ]
+      carbonapi        [ label = "carbonapi" color = "sandybrown" style = filled ]
+      icinga2_master   [ label = "icinga2" color = "sandybrown" style = filled ]
+      mysql_monitoring [ label = "mysql" color = "sandybrown" style = filled ]
+
+      httpd_monitoring -> grafana [ color = "sandybrown" ]
+      httpd_monitoring -> icingaweb [ color = "sandybrown" ]
+      httpd_monitoring -> algernon [ color = "sandybrown" ]
+
+      icingaweb        -> mysql_monitoring [ color = "sandybrown" ]
+      icingaweb        -> icinga2_master [ color = "sandybrown" ]
+      icinga2_master   -> mysql_monitoring [ color = "sandybrown" ]
+
+      grafana          -> mysql_monitoring [ color = "sandybrown" ]
+
+      grafana          -> carbonapi [ color = "sandybrown" ]
+
+      carbonapi        -> go_carbon [ color = "sandybrown" ]
+
+    }
+  }
+
+  { rank = same; cms; mls; rls; }
+  // { rank = same; solr_fe; solr_fe_slave; }
+  { rank = same; cae_preview; cae1; cae2; cae3; }
+  { rank = same; feeder_live; feeder_preview; content_feeder }
+  { rank = same; httpd_fe; httpd_be; httpd_monitoring }
+/*
+  {
+    rank = same
+    cms
+    jolokia_backend
+    icinga2_satellite_backend
+    graphythe_daemon_backend
+  }
+
+  {
+    rank = same
+    mls
+    jolokia_frontend
+    icinga2_satellite_frontend
+    graphythe_daemon_frontend
+  }
+
+  {
+    rank = same
+    mysql_be
+    mongodb
+    icinga2_satellite_backend_dba
+    graphythe_daemon_backend_dba
+  }
+
+  {
+    rank = same
+    mysql_fe
+    icinga2_satellite_frontend_dba
+    graphythe_daemon_frontend_dba
+  }
+
+  {
+    rank = same
+    rls
+    jolokia_delivery
+    icinga2_satellite_delivery
+    graphythe_daemon_delivery
+  }
+*/
+
+  graphythe_daemon_backend_dba   -> go_carbon [ color = "sandybrown" ]
+  graphythe_daemon_frontend_dba  -> go_carbon [ color = "sandybrown" ]
+  graphythe_daemon_backend       -> go_carbon [ color = "sandybrown" ]
+  graphythe_daemon_frontend      -> go_carbon [ color = "sandybrown" ]
+  graphythe_daemon_delivery      -> go_carbon [ color = "sandybrown" ]
+  graphythe_daemon_delivery      -> jolokia_frontend [ color = "sandybrown" ]
+
+  icinga2_satellite_backend_dba  -> icinga2_master [ color = "sandybrown" ]
+  icinga2_satellite_frontend_dba -> icinga2_master [ color = "sandybrown" ]
+  icinga2_satellite_backend      -> icinga2_master [ color = "sandybrown" ]
+  icinga2_satellite_frontend     -> icinga2_master [ color = "sandybrown" ]
+  icinga2_satellite_delivery     -> icinga2_master [ color = "sandybrown" ]
+
+
+  cms       -> mls [ penwidth = 2, color = "red" ]
+  rls       -> mls [ penwidth = 2, color = "red" ]
+  solr_fe_slave -> solr_fe [ constraint = false ]
+
+}
